@@ -9,6 +9,7 @@
   "private": true,
   "scripts": {
     "start": "node dist/server.js",
+    "test": "jest --detectOpenHandles --forceExit",
     "dev": "ts-node server.ts",
     "nodemon": "nodemon"
   },
@@ -17,6 +18,7 @@
     "@types/mongoose": "^5.7.36",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.11.8",
+    "@types/supertest": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "moment": "^2.29.1",
@@ -25,5 +27,12 @@
     "nodemon": "^2.0.4",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "@jest/globals": "^26.5.2",
+    "@types/jest": "^26.0.14",
+    "jest": "^26.5.2",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1"
   }
 }
