@@ -1,17 +1,16 @@
 import * as http from 'http'
+import { keys } from './keys/keys'
 import { app } from './app'
-import dotenv from 'dotenv'
-dotenv.config()
 
-const PORT = process.env.PORT
+const PORT = keys.PORT
 
 const server = http.createServer(app)
 
-server.listen(PORT, () : void => {
+server.listen(PORT, (): void => {
   console.log('server is working on', PORT)
 })
 
-process.on('uncaughtException', (err: Error) : void => {
+process.on('uncaughtException', (err: Error): void => {
   console.error('Server RUINED\n', err)
   process.exit(1)
 })
