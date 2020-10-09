@@ -183,6 +183,113 @@ describe('Tests for endpoints', () => {
         done();
       });
 
+  test('PATCH - /api/washingMachine/:serialNumber - get an updated machine',
+      async (done: DoneCallback): Promise<void> => {
+        const prevState: supertest.Response = await request(app).
+            get('/api/washingMachine/936');
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/388').
+            send({
+              updates: {
+                washingCycles: 900,
+              },
+            });
+        const {status, data}: { status: string, data: IWashingMachine } = response.body;
+        const prevData: IWashingMachine = prevState.body.data;
+        expect(response.status).toBe(200);
+        expect(status).toBe('success');
+        expect(data.washingCycles).toEqual(900);
+        expect(prevData.washingCycles).toBe(0);
+        done();
+      });
+
+  test('PATCH - /api/washingMachine/:serialNumber - nothing update if serial' +
+      ' number isn\'t exist',
+      async (done: DoneCallback): Promise<void> => {
+        const prevState: supertest.Response = await request(app).
+            get('/api/washingMachine/388');
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/00').
+            send({
+              updates: {
+                washingCycles: 1230,
+              },
+            });
+        const currentState: supertest.Response = await request(app).
+            get('/api/washingMachine/388');
+        const prevData: IWashingMachine = prevState.body.data;
+        const currentData: IWashingMachine = currentState.body.data;
+        const {status, data}: { status: string, data: string } = response.body;
+        expect(response.status).toBe(404);
+        expect(status).toBe('failed');
+        expect(data).toContain('не найдена');
+        expect(prevData.washingCycles).toEqual(currentData.washingCycles);
+        done();
+      });
+
+  test('PATCH - /api/washingMachine/model - get an updated all machines with' +
+      ' the same model',
+      async (done: DoneCallback): Promise<void> => {
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/model').
+            send({
+              updates: {
+                washingCycles: 48910,
+              },
+              model: 'testing model',
+            });
+        const {status, data}: { status: string, data: Array<IWashingMachine> } = response.body;
+        expect(response.status).toBe(200);
+        expect(status).toBe('success');
+        expect(data[0].washingCycles).toEqual(data[1].washingCycles);
+        expect(data[0].model).toEqual(data[1].model);
+        done();
+      });
+
+  test('PATCH - api/washingMachine/model - update nothing and get status' +
+      ' failed if wrong model',
+      async (done: DoneCallback): Promise<void> => {
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/model').
+            send({
+              updates: {
+                washingCycles: 900000,
+              },
+              model: 'second model',
+            });
+        const {status, data}: { status: string, data: string } = response.body;
+        expect(response.status).toBe(404);
+        expect(status).toBe('failed');
+        expect(data).toContain('не найдены');
+        done();
+      });
+
+  test('PATCH - api/washingMachine/status/:serialNumber - update status of' +
+      ' one machine',
+      async (done: DoneCallback): Promise<void> => {
+        const prevState: supertest.Response = await request(app).
+            get('/api/washingMachine/388');
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/status/388');
+        const prevData: IWashingMachine = prevState.body.data;
+        const {status, data}: { status: string, data: IWashingMachine } = response.body;
+        expect(response.status).toBe(200);
+        expect(status).toBe('success');
+        expect(data.status).toBe(!prevData.status);
+        done();
+      });
+
+  test('PATCH - api/washingMachine/status/:serialNumber - update nothing if' +
+      ' serial number is wrong',
+      async (done: DoneCallback): Promise<void> => {
+    const response: supertest.Response = await request(app).patch('/api/washingMachine/status/0')
+        const {status, data}: {status: string, data: string} = response.body
+        expect(response.status).toBe(404)
+        expect(status).toBe('failed')
+        expect(data).toContain('не найдена')
+        done()
+      })
+
   test(
       'DELETE - /api/washingMachine/:serialNumber - delete one machine by serial number',
       async (done: DoneCallback): Promise<void> => {
@@ -208,7 +315,7 @@ describe('Tests for endpoints', () => {
       });
 
   test(
-      'DELETE - /api/washingMachine/model - delete anything if model isn\'t' +
+      'DELETE - /api/washingMachine/model - delete nothing if model isn\'t' +
       ' exist',
       async (done: DoneCallback): Promise<void> => {
         const response: supertest.Response = await request(app).

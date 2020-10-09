@@ -140,7 +140,7 @@ class WashingMachineController {
 
     try {
       const removedData = await WashingMachineModel
-        .remove({serialNumber})
+        .deleteOne({serialNumber})
         .exec();
 
       if (!removedData.deletedCount) {
@@ -169,7 +169,7 @@ class WashingMachineController {
 
     try {
       const removedData = await WashingMachineModel
-        .remove({model})
+        .deleteMany({model})
         .exec();
 
       if (!removedData.deletedCount) {
@@ -204,7 +204,6 @@ class WashingMachineController {
               {$set: updates},
               {new: true}
               );
-
       if (!machine) {
         res.status(404).json({
           status: 'failed',
@@ -245,6 +244,7 @@ class WashingMachineController {
           status: 'failed',
           data: `Машины по модели ${model} не найдены`
         });
+        return
       }
 
       res.status(200).json({
@@ -265,7 +265,7 @@ class WashingMachineController {
 
     try {
       const machine: WashingMachineDocumentInterface | null = await WashingMachineModel
-        .findOne({serialNumber}, {serialNumber: 1})
+        .findOne({serialNumber}, {status: 1})
         .exec();
 
       if (machine) {
