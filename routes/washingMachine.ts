@@ -1,7 +1,7 @@
 import express from 'express'
 import {WashingMachineCtrl} from '../controllers/WashingMachineController'
 
-export const router: express.Router = express.Router()
+const router: express.Router = express.Router()
 
 router.get('/', WashingMachineCtrl.getAll)
 router.get('/model', WashingMachineCtrl.getMachinesByModel)
@@ -14,5 +14,7 @@ router.delete('/model', WashingMachineCtrl.removeMachineByModel)
 router.delete('/:serialNumber', WashingMachineCtrl.removeMachineBySerialNumber)
 
 router.patch('/model', WashingMachineCtrl.updateMachinesByModel)
-router.patch('/status', WashingMachineCtrl.updateMachineStatusBySerialNumber)
+router.patch('/status/:serialNumber', WashingMachineCtrl.updateMachineStatusBySerialNumber)
 router.patch('/:serialNumber', WashingMachineCtrl.updateMachineBySerialNumber)
+
+export default router

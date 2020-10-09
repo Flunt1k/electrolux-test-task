@@ -2,8 +2,8 @@ import { Document, model, Schema } from 'mongoose'
 
 export interface IWashingMachine {
   id?: string;
-  model: string;
   serialNumber: number;
+  model: string;
   dateOfManufacture: string;
   washingCycles?: number;
   status?: boolean;
