@@ -1,3 +1,5 @@
+import {machineErrors} from '../types/types';
+
 export interface IWashingMachine {
   _id: string,
   model: string,
@@ -5,5 +7,5 @@ export interface IWashingMachine {
   dateOfManufacture: string,
   status: boolean,
   washingCycles: number,
-  historyOfErrors: Array<object>
+  historyOfErrors: Array<machineErrors>
 }

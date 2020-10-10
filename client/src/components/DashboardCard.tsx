@@ -14,6 +14,7 @@ import WorkingIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
 import {useHomeStyles} from '../pages/Home';
+import ModalBlock from './ModalBlock';
 
 interface DashboardCardProps {
   data: IWashingMachine,
@@ -21,6 +22,15 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardCardProps): React.ReactElement => {
+  const [visible, setVisible] = React.useState<boolean>(false)
+
+  const handleClickOpenModal = (): void => {
+    setVisible(true)
+  }
+
+  const handleClickCloseModal = (): void => {
+    setVisible(false)
+  }
   return (
       <>
         <Grid item xs={4}>
@@ -68,12 +78,18 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
                     <span>{data.status ? 'Выключить' : 'Включить'}</span>
                   </Button>
                 </span>
-                <Button color={'primary'} variant={'contained'}>
+                <Button color={'primary'} variant={'contained'} onClick={handleClickOpenModal}>
                   История ошибок
                 </Button>
               </CardActions>
           </Card>
         </Grid>
+        <ModalBlock classes={classes}
+                    errors={data.historyOfErrors}
+                    onClose={handleClickCloseModal}
+                    visible={visible}
+                    serialNumber={data.serialNumber}
+        />
       </>
   );
 };

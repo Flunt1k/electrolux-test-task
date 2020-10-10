@@ -44,32 +44,35 @@ export const useHomeStyles = makeStyles(() => ({
 
   statusState: {
     display: 'flex',
-    width: '40%',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    marginLeft: 10,
+    '& svg': {
+      marginRight: 4,
+    },
   },
 
   statusWorking: {
     color: '#34b830',
     '& button': {
       backgroundColor: '#34b830',
-      color: '#fff'
+      color: '#fff',
     },
     '& button:hover': {
       backgroundColor: '#1c7319',
-    }
+    },
   },
 
   statusError: {
     color: '#ff0808',
     '& button': {
       backgroundColor: '#ff0808',
-      color: '#fff'
+      color: '#fff',
     },
 
     '& button:hover': {
-      backgroundColor: '#b51b1b'
-    }
+      backgroundColor: '#b51b1b',
+    },
   },
 
   changeStatusBtn: {
@@ -80,10 +83,35 @@ export const useHomeStyles = makeStyles(() => ({
   bottomBtns: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '10px 5px'
+    margin: '10px 5px',
+  },
+
+  dialogTitle: {
+    '& h2': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
+  },
+
+  listOfErrors: {
+    maxHeight: 200,
+    overflow: 'auto',
+  },
+
+  errorCodeInput: {
+    marginRight: '5%',
+    width: '40%'
+  },
+
+  errorTextInput: {
+    width: '55%'
+  },
+
+  formBtn: {
+    display: 'flex',
+    justifyContent: 'center'
   }
-
-
 
 }));
 
@@ -97,7 +125,13 @@ const Home: React.FC = (): React.ReactElement => {
       dateOfManufacture: '24.09.2021',
       status: true,
       washingCycles: 12,
-      historyOfErrors: [],
+      historyOfErrors: [
+        {code: 'E201', errorText: 'Поломка барабана'},
+        {code: 'E401', errorText: 'Отключение питания'},
+        {code: 'D201', errorText: 'Поломка шланга'},
+        {code: 'K7011', errorText: 'Экстренное отключение'},
+
+      ],
     },
     {
       _id: '2',
