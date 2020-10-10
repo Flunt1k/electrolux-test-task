@@ -17,9 +17,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {useHomeStyles} from '../pages/Home';
-import ModalBlock from './ModalBlock';
+import ModalErrorBlock from './ModalErrorBlock';
 import EditForm from './EditForm';
-import {useEditForm} from '../hooks/useEditForm';
+import {useMainForm} from '../hooks/useMainForm';
 
 interface DashboardCardProps {
   data: IWashingMachine,
@@ -29,12 +29,12 @@ interface DashboardCardProps {
 const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardCardProps): React.ReactElement => {
   const [visible, setVisible] = React.useState<boolean>(false);
   const [editState, setEditState] = React.useState<boolean>(false);
-  const [editFormValues, setEditFormValues] = useEditForm({
+  const [editFormValues, setEditFormValues] = useMainForm({
     model: data.model,
     dateOfManufacture: data.dateOfManufacture,
     serialNumber: data.serialNumber,
-    washingCycles: data.washingCycles
-  })
+    washingCycles: data.washingCycles,
+  });
 
   const handleClickOpenModal = (): void => {
     setVisible(true);
@@ -44,8 +44,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
     setVisible(false);
   };
 
-  const handleClickEditToggle = (state: boolean): void => {
-    setEditState(() => !state);
+  const handleClickEditToggle = (): void => {
+    setEditState(prevSate => !prevSate);
   };
 
   return (
@@ -58,13 +58,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
             />
             <CardContent style={{position: 'relative'}}>
               <IconButton className={classes.editBtn}
-                          onClick={() => handleClickEditToggle(editState)}
+                          onClick={handleClickEditToggle}
               >
                 <EditIcon color={'primary'}/>
               </IconButton>
               {editState ?
                   <>
-                    <EditForm dataState={editFormValues} changeDataState={setEditFormValues}/>
+                    <EditForm dataState={editFormValues}
+                              changeDataState={setEditFormValues}/>
                   </>
                   :
                   <>
@@ -121,11 +122,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
             }
           </Card>
         </Grid>
-        <ModalBlock classes={classes}
-                    errors={data.historyOfErrors}
-                    onClose={handleClickCloseModal}
-                    visible={visible}
-                    serialNumber={data.serialNumber}
+        <ModalErrorBlock classes={classes}
+                         errors={data.historyOfErrors}
+                         onClose={handleClickCloseModal}
+                         visible={visible}
+                         serialNumber={data.serialNumber}
         />
       </>
   );

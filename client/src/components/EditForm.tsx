@@ -2,14 +2,10 @@ import React from 'react';
 
 import TextField from '@material-ui/core/TextField/TextField';
 
-import {initialStateUseEditForm} from '../types/types';
+import { MainFormInterface } from '../interfaces/IWashingMachine';
 
-interface EditFormInterface {
-  dataState: initialStateUseEditForm;
-  changeDataState: (e: React.ChangeEvent) => void
-}
 
-const EditForm: React.FC<EditFormInterface> = ({dataState, changeDataState}: EditFormInterface): React.ReactElement => {
+const EditForm: React.FC<MainFormInterface> = ({dataState, changeDataState}: MainFormInterface): React.ReactElement => {
 
   return (
       <>

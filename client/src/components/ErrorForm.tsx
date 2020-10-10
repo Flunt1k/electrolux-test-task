@@ -13,8 +13,8 @@ interface ErrorFormInterface {
 const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErrorState}: ErrorFormInterface): React.ReactElement => {
 
   const handleClickAddError = (): void => {
-    changeErrorState()
-  }
+    changeErrorState();
+  };
   return (
       <>
         <TextField
@@ -23,8 +23,8 @@ const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErr
             type="text"
             name="code"
             value={errorState.code}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>):void => {
-              changeErrorState(e)
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+              changeErrorState(e);
             }}
             className={classes.errorCodeInput}
         />
@@ -34,8 +34,8 @@ const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErr
             type="text"
             name="errorText"
             value={errorState.errorText}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>):void => {
-              changeErrorState(e)
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+              changeErrorState(e);
             }}
             className={classes.errorTextInput}
         />

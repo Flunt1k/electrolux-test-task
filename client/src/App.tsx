@@ -15,6 +15,15 @@ const useStyles = makeStyles(() => ({
 
 function App() {
   const classes = useStyles()
+  const [visible, setVisible] = React.useState<boolean>(false)
+
+  const handleClickOpenModal = ():void => {
+    setVisible(true)
+  }
+
+  const handleClickCloseModal = ():void => {
+    setVisible(false)
+  }
   return (
       <div>
         <>
@@ -23,11 +32,15 @@ function App() {
               <Typography variant="h6">
                 Dashboard
               </Typography>
-              <Button color="inherit">Добавить стиральную машину</Button>
+              <Button color="inherit"
+                      onClick={handleClickOpenModal}
+              >
+                Добавить стиральную машину
+              </Button>
             </Toolbar>
           </AppBar>
         </>
-        <Home/>
+        <Home visibleCreateMachine={visible} onClose={handleClickCloseModal}/>
       </div>
   );
 }

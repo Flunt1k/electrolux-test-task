@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import {IWashingMachine} from '../interfaces/IWashingMachine';
+import ModalAddBlock from '../components/ModalAddBlock';
 
 export const useHomeStyles = makeStyles(() => ({
   media: {
@@ -91,8 +92,8 @@ export const useHomeStyles = makeStyles(() => ({
     '& h2': {
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center'
-    }
+      alignItems: 'center',
+    },
   },
 
   listOfErrors: {
@@ -102,33 +103,38 @@ export const useHomeStyles = makeStyles(() => ({
 
   errorCodeInput: {
     marginRight: '5%',
-    width: '40%'
+    width: '40%',
   },
 
   errorTextInput: {
-    width: '55%'
+    width: '55%',
   },
 
   formBtn: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   editBtn: {
     position: 'absolute',
     right: 0,
-    top: 0
+    top: 0,
   },
 
   deleteBtn: {
     position: 'absolute',
     right: 40,
-    top: 0
-  }
+    top: 0,
+  },
 
 }));
 
-const Home: React.FC = (): React.ReactElement => {
+interface HomeInterface {
+  visibleCreateMachine: boolean
+  onClose: () => void
+}
+
+const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInterface): React.ReactElement => {
   const classes = useHomeStyles();
   const mockData: Array<IWashingMachine> = [
     {
@@ -158,15 +164,19 @@ const Home: React.FC = (): React.ReactElement => {
   ];
 
   return (
-      <div>
+      <>
         <Container>
           <Grid container spacing={4} style={{marginTop: 10}}>
             {mockData.map(
-                machine => <DashboardCard key={machine._id} data={machine}
+                machine => <DashboardCard key={machine._id}
+                                          data={machine}
                                           classes={classes}/>)}
           </Grid>
         </Container>
-      </div>
+        <ModalAddBlock classes={classes}
+                       visible={visibleCreateMachine}
+                       onClose={onClose}/>
+      </>
   );
 };
 

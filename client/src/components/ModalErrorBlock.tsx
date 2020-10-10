@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import Dialog from '@material-ui/core/Dialog/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
@@ -12,6 +13,7 @@ import {useHomeStyles} from '../pages/Home';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import {machineErrors} from '../types/types';
 import ErrorForm from './ErrorForm';
+
 import {useErrorForm} from '../hooks/useErrorForm';
 
 interface ModalBlockProps {
@@ -22,31 +24,35 @@ interface ModalBlockProps {
   onClose: () => void;
 }
 
-const ModalBlock: React.FC<ModalBlockProps> = ({
+const ModalErrorBlock: React.FC<ModalBlockProps> = ({
   classes,
   errors,
   serialNumber,
   visible,
   onClose,
 }: ModalBlockProps): React.ReactElement => {
-  const [errorInputs, setErrorInputs] = useErrorForm({code: '', errorText: ''})
+  const [errorInputs, setErrorInputs] = useErrorForm({code: '', errorText: ''});
 
   return (
       <Dialog open={visible} onClose={onClose}
               aria-labelledby="form-dialog-title" fullWidth>
         <DialogTitle id="form-dialog-title" className={classes.dialogTitle}>
           Серийный номер машины: {serialNumber}
-          <IconButton onClick={onClose} color="secondary" aria-label="close">
+          <IconButton onClick={onClose}
+                      color="secondary"
+                      aria-label="close"
+          >
             <CloseIcon style={{fontSize: 26}} color="primary"/>
           </IconButton>
         </DialogTitle>
-        <DialogContent style={{margin: '0 auto', minWidth: "100%"}} dividers>
+        <DialogContent style={{margin: '0 auto', minWidth: '100%'}} dividers>
           {errors.length ?
               <Paper className={classes.listOfErrors}>
                 <List>
                   {errors.map((error: machineErrors) => {
+                    const key = uuidv4()
                     return (
-                        <ListItem>
+                        <ListItem key={key}>
                           <ListItemText><b>Код ошибки: {error.code}</b> || Текст
                             ошибки: {error.errorText}</ListItemText>
                         </ListItem>
@@ -57,10 +63,11 @@ const ModalBlock: React.FC<ModalBlockProps> = ({
               <h2>Ошибки отсутствуют</h2>
           }
           <h4 style={{marginBottom: 0}}>Добавить ошибку</h4>
-          <ErrorForm classes={classes} changeErrorState={setErrorInputs} errorState={errorInputs}/>
+          <ErrorForm classes={classes} changeErrorState={setErrorInputs}
+                     errorState={errorInputs}/>
         </DialogContent>
       </Dialog>
   );
 };
 
-export default ModalBlock;
+export default ModalErrorBlock;

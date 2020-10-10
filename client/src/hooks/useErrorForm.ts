@@ -8,9 +8,9 @@ export const useErrorForm = (initialState: initialStateUseErrorForm): [initialSt
       setState({code: '', errorText: ''})
       return
     }
-   const element = e.target as HTMLInputElement
-   const value = element.value
-   const name = element.name
+   const element: HTMLInputElement = e.target as HTMLInputElement
+   const value: string = element.value
+   const name: string = element.name
    setState({...state, [name]: value})
   }
 
