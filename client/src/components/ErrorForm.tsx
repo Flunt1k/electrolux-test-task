@@ -7,10 +7,14 @@ import {initialStateUseErrorForm} from '../types/types';
 interface ErrorFormInterface {
   classes: ReturnType<typeof useHomeStyles>;
   errorState: initialStateUseErrorForm;
-  changeErrorState: (e: React.ChangeEvent) => void
+  changeErrorState: (e?: React.ChangeEvent) => void
 }
 
 const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErrorState}: ErrorFormInterface): React.ReactElement => {
+
+  const handleClickAddError = (): void => {
+    changeErrorState()
+  }
   return (
       <>
         <TextField
@@ -19,7 +23,9 @@ const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErr
             type="text"
             name="code"
             value={errorState.code}
-            onChange={changeErrorState}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>):void => {
+              changeErrorState(e)
+            }}
             className={classes.errorCodeInput}
         />
         <TextField
@@ -28,12 +34,19 @@ const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErr
             type="text"
             name="errorText"
             value={errorState.errorText}
-            onChange={changeErrorState}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>):void => {
+              changeErrorState(e)
+            }}
             className={classes.errorTextInput}
         />
         <span className={classes.formBtn}>
-        <Button variant={'contained'} color={'primary'} style={{margin: '15px' +
-              ' 10px'}}>Добавить</Button>
+        <Button variant={'contained'}
+                color={'primary'}
+                style={{margin: '15px 10px'}}
+                onClick={handleClickAddError}
+        >
+          Добавить
+        </Button>
         </span>
       </>
   );

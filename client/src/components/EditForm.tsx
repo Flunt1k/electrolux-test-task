@@ -18,38 +18,38 @@ const EditForm: React.FC<EditFormInterface> = ({dataState, changeDataState}: Edi
             label="Модель"
             name="model"
             type="text"
+            fullWidth
             value={dataState.model}
             onChange={changeDataState}
-            fullWidth
         />
         <TextField
             margin="dense"
             label="Серийный номер"
             type="text"
-            onChange={changeDataState}
             name="serialNumber"
-            value={dataState.serialNumber}
             fullWidth
+            value={dataState.serialNumber}
+            onChange={changeDataState}
         />
         <TextField
             margin="dense"
             label="Циклов работы"
             type="text"
-            onChange={changeDataState}
             name="washingCycles"
-            value={dataState.washingCycles}
             fullWidth
+            value={dataState.washingCycles}
+            onChange={changeDataState}
         />
         <TextField
             id="date"
-            label="Birthday"
+            label="Дата производства"
             type="date"
             name="dateOfManufacture"
-            value={dataState.dateOfManufacture}
-            onChange={changeDataState}
             InputLabelProps={{
               shrink: true,
             }}
+            value={dataState.dateOfManufacture}
+            onChange={changeDataState}
         />
       </>
   );
