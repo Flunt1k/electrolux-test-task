@@ -15,12 +15,13 @@ export const useHomeStyles = makeStyles(() => ({
 
   card: {
     position: 'relative',
+    minHeight: 393,
   },
 
   model: {
     position: 'absolute',
     color: '#fff',
-    top: 0,
+    top: -100,
     left: 0,
     textAlign: 'center',
     width: '100%',
@@ -111,6 +112,18 @@ export const useHomeStyles = makeStyles(() => ({
   formBtn: {
     display: 'flex',
     justifyContent: 'center'
+  },
+
+  editBtn: {
+    position: 'absolute',
+    right: 0,
+    top: 0
+  },
+
+  deleteBtn: {
+    position: 'absolute',
+    right: 40,
+    top: 0
   }
 
 }));

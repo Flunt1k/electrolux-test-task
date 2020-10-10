@@ -12,6 +12,7 @@ import {useHomeStyles} from '../pages/Home';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import {machineErrors} from '../types/types';
 import ErrorForm from './ErrorForm';
+import {useErrorForm} from '../hooks/useErrorForm';
 
 interface ModalBlockProps {
   classes: ReturnType<typeof useHomeStyles>;
@@ -28,6 +29,8 @@ const ModalBlock: React.FC<ModalBlockProps> = ({
   visible,
   onClose,
 }: ModalBlockProps): React.ReactElement => {
+  const [errorInputs, setErrorInputs] = useErrorForm({code: '', errorText: ''})
+
   return (
       <Dialog open={visible} onClose={onClose}
               aria-labelledby="form-dialog-title" fullWidth>
@@ -41,7 +44,7 @@ const ModalBlock: React.FC<ModalBlockProps> = ({
           {errors.length ?
               <Paper className={classes.listOfErrors}>
                 <List>
-                  {errors.map((error, index) => {
+                  {errors.map((error: machineErrors) => {
                     return (
                         <ListItem>
                           <ListItemText><b>Код ошибки: {error.code}</b> || Текст
@@ -54,7 +57,7 @@ const ModalBlock: React.FC<ModalBlockProps> = ({
               <h2>Ошибки отсутствуют</h2>
           }
           <h4 style={{marginBottom: 0}}>Добавить ошибку</h4>
-          <ErrorForm classes={classes}/>
+          <ErrorForm classes={classes} changeErrorState={setErrorInputs} errorState={errorInputs}/>
         </DialogContent>
       </Dialog>
   );
