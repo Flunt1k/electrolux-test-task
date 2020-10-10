@@ -6,7 +6,6 @@ import {app} from '../app';
 import {keys} from '../keys/keys';
 import {IWashingMachine, WashingMachineModel} from '../models/WashingMachine';
 
-import {describe} from '@jest/globals';
 import DoneCallback = jest.DoneCallback;
 
 describe('Tests for endpoints', () => {
