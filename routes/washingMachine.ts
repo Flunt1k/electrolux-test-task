@@ -6,7 +6,6 @@ const router: express.Router = express.Router()
 router.get('/', WashingMachineCtrl.getAll)
 router.get('/model', WashingMachineCtrl.getMachinesByModel)
 router.get('/status', WashingMachineCtrl.getMachinesByStatus)
-router.get('/:serialNumber', WashingMachineCtrl.getMachineBySerialNumber)
 
 router.post('/', WashingMachineCtrl.addNewMachine)
 

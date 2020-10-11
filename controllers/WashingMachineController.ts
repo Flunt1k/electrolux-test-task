@@ -25,35 +25,6 @@ class WashingMachineController {
     }
   }
 
-  async getMachineBySerialNumber(
-      req: express.Request,
-      res: express.Response,
-  ): Promise<void> {
-    const serialNumber: number = +req.params.serialNumber;
-
-    try {
-      const machine: WashingMachineDocumentInterface | null = await WashingMachineModel
-        .findOne({serialNumber})
-        .exec();
-
-      if (!machine) {
-        res.status(404).json({
-          status: 'failed',
-          data: `Машина с серийным номером ${serialNumber} не найдена`,
-        });
-        return;
-      }
-
-      res.status(200).json({
-        status: 'success',
-        data: machine,
-      });
-
-    } catch (err) {
-      errorHandler(err, res);
-    }
-  }
-
   async getMachinesByModel(
       req: express.Request,
       res: express.Response,
@@ -68,7 +39,7 @@ class WashingMachineController {
       if (!machines.length) {
         res.status(404).json({
           status: 'failed',
-          data: `Машины по модели ${model} не найдены!`,
+          message: `Машины по модели ${model} не найдены!`,
         });
         return;
       }
@@ -146,14 +117,14 @@ class WashingMachineController {
       if (!removedData.deletedCount) {
         res.status(404).json({
           status: 'failed',
-          data: `Машина с серийным номером ${serialNumber} не найдена`,
+          message: `Машина с серийным номером ${serialNumber} не найдена`,
         });
         return;
       }
 
       res.status(200).json({
         status: 'success',
-        data: `Машина с серийным номером ${serialNumber} успешно удалена`,
+        data: serialNumber,
       });
 
     } catch (err) {
@@ -175,14 +146,14 @@ class WashingMachineController {
       if (!removedData.deletedCount) {
         res.status(404).json({
           status: 'failed',
-          data: `Машины по модели ${model} не найдены`,
+          message: `Машины по модели ${model} не найдены`,
         });
         return;
       }
 
       res.status(200).json({
         status: 'success',
-        data: `Машины по модели ${model} успешно удалены`,
+        data: model,
       });
 
     } catch (err) {
@@ -207,7 +178,7 @@ class WashingMachineController {
       if (!machine) {
         res.status(404).json({
           status: 'failed',
-          data: `Машина с серийным номером ${serialNumber} не найдена`,
+          message: `Машина с серийным номером ${serialNumber} не найдена`,
         });
         return;
       }
@@ -242,7 +213,7 @@ class WashingMachineController {
       if (!machines.length) {
         res.status(404).json({
           status: 'failed',
-          data: `Машины по модели ${model} не найдены`
+          message: `Машины по модели ${model} не найдены`
         });
         return
       }
@@ -265,7 +236,7 @@ class WashingMachineController {
 
     try {
       const machine: WashingMachineDocumentInterface | null = await WashingMachineModel
-        .findOne({serialNumber}, {status: 1})
+        .findOne({serialNumber}, {status: 1, serialNumber: 1})
         .exec();
 
       if (machine) {
@@ -280,7 +251,7 @@ class WashingMachineController {
 
       res.status(404).json({
         status: 'failed',
-        data: `Машина с серийным номером ${serialNumber} не найдена`
+        message: `Машина с серийным номером ${serialNumber} не найдена`
       });
 
     } catch (err) {
