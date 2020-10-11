@@ -12,7 +12,6 @@ router.post('/', WashingMachineCtrl.addNewMachine)
 router.delete('/model', WashingMachineCtrl.removeMachineByModel)
 router.delete('/:serialNumber', WashingMachineCtrl.removeMachineBySerialNumber)
 
-router.patch('/model', WashingMachineCtrl.updateMachinesByModel)
 router.patch('/status/:serialNumber', WashingMachineCtrl.updateMachineStatusBySerialNumber)
 router.patch('/:serialNumber', WashingMachineCtrl.updateMachineBySerialNumber)
 

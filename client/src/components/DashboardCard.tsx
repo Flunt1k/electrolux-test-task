@@ -20,6 +20,7 @@ import {useHomeStyles} from '../pages/Home';
 import ModalErrorBlock from './ModalErrorBlock';
 import EditForm from './EditForm';
 import {useMainForm} from '../hooks/useMainForm';
+import ModalDeleteBlock from './ModalDeleteBlock';
 
 interface DashboardCardProps {
   data: IWashingMachine,
@@ -27,7 +28,7 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardCardProps): React.ReactElement => {
-  const [visible, setVisible] = React.useState<boolean>(false);
+  const [visible, setVisible] = React.useState<'Error' | 'Delete'>();
   const [editState, setEditState] = React.useState<boolean>(false);
   const [editFormValues, setEditFormValues] = useMainForm({
     model: data.model,
@@ -36,12 +37,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
     washingCycles: data.washingCycles,
   });
 
-  const handleClickOpenModal = (): void => {
-    setVisible(true);
+  const handleClickOpenModal = (value: string): void => {
+    if (value === 'Error') setVisible('Error');
+    else setVisible('Delete');
   };
 
   const handleClickCloseModal = (): void => {
-    setVisible(false);
+    setVisible(undefined);
   };
 
   const handleClickEditToggle = (): void => {
@@ -69,7 +71,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
                   </>
                   :
                   <>
-                    <IconButton className={classes.deleteBtn}>
+                    <IconButton className={classes.deleteBtn}
+                                onClick={() => handleClickOpenModal('Delete')}
+                    >
                       <DeleteIcon color={'primary'}/>
                     </IconButton>
                     <Typography component={'div'} className={classes.model}>
@@ -115,7 +119,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
               </Button>
               </span>
                   <Button color={'primary'} variant={'contained'}
-                          onClick={handleClickOpenModal}>
+                          onClick={() => handleClickOpenModal('Error')}>
                     История ошибок
                   </Button>
                 </CardActions>
@@ -125,9 +129,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
         <ModalErrorBlock classes={classes}
                          errors={data.historyOfErrors}
                          onClose={handleClickCloseModal}
-                         visible={visible}
+                         visible={visible === 'Error'}
                          serialNumber={data.serialNumber}
         />
+        <ModalDeleteBlock classes={classes}
+                          visible={visible === 'Delete'}
+                          serialNumber={data.serialNumber}
+                          model={data.model}
+                          onClose={handleClickCloseModal}/>
       </>
   );
 };
