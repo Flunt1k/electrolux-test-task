@@ -2,11 +2,11 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {useHomeStyles} from '../pages/Home';
-import {initialStateUseErrorForm} from '../types/types';
+import {ErrorFormStateInterface} from '../interfaces';
 
 interface ErrorFormInterface {
   classes: ReturnType<typeof useHomeStyles>;
-  errorState: initialStateUseErrorForm;
+  errorState: ErrorFormStateInterface;
   changeErrorState: (e?: React.ChangeEvent) => void
 }
 

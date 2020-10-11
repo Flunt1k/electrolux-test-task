@@ -5,7 +5,7 @@ import DashboardCard from '../components/DashboardCard';
 import Container from '@material-ui/core/Container/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-import {IWashingMachine} from '../interfaces/IWashingMachine';
+import {IWashingMachine} from '../interfaces';
 import ModalAddBlock from '../components/ModalAddBlock';
 
 export const useHomeStyles = makeStyles(() => ({

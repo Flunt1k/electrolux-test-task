@@ -2,7 +2,7 @@ import React from 'react';
 
 import TextField from '@material-ui/core/TextField/TextField';
 
-import { MainFormInterface } from '../interfaces/IWashingMachine';
+import { MainFormInterface } from '../interfaces';
 
 
 const EditForm: React.FC<MainFormInterface> = ({dataState, changeDataState}: MainFormInterface): React.ReactElement => {

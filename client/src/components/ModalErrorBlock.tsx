@@ -11,14 +11,14 @@ import Paper from '@material-ui/core/Paper/Paper';
 import CloseIcon from '@material-ui/icons/Close';
 import {useHomeStyles} from '../pages/Home';
 import IconButton from '@material-ui/core/IconButton/IconButton';
-import {machineErrors} from '../types/types';
+import {IMachineErrors} from '../interfaces';
 import ErrorForm from './ErrorForm';
 
 import {useErrorForm} from '../hooks/useErrorForm';
 
 interface ModalBlockProps {
   classes: ReturnType<typeof useHomeStyles>;
-  errors: machineErrors[];
+  errors: IMachineErrors[];
   serialNumber: number;
   visible: boolean;
   onClose: () => void;
@@ -49,7 +49,7 @@ const ModalErrorBlock: React.FC<ModalBlockProps> = ({
           {errors.length ?
               <Paper className={classes.listOfErrors}>
                 <List>
-                  {errors.map((error: machineErrors) => {
+                  {errors.map((error: IMachineErrors) => {
                     const key = uuidv4()
                     return (
                         <ListItem key={key}>

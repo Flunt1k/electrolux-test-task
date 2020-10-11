@@ -6,7 +6,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import {MainFormInterface} from '../interfaces/IWashingMachine';
+import {MainFormInterface} from '../interfaces';
 
 
 const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState}:MainFormInterface): React.ReactElement => {

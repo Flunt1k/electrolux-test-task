@@ -1,16 +1,16 @@
 import React from 'react';
-import {initialStateUseMainForm} from '../types/types';
+import {MainFormStateInterface} from '../interfaces';
 import {convertDate} from '../utils/dataConverter';
 
 export const useMainForm = (
-    initialState: initialStateUseMainForm
-): [initialStateUseMainForm, (e: React.ChangeEvent) => void] => {
+    initialState: MainFormStateInterface
+): [MainFormStateInterface, (e: React.ChangeEvent) => void] => {
   initialState = {
     ...initialState,
     'dateOfManufacture': convertDate(initialState.dateOfManufacture
     ),
   };
-  const [state, setState] = React.useState<initialStateUseMainForm>(
+  const [state, setState] = React.useState<MainFormStateInterface>(
       initialState
   );
 
