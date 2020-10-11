@@ -27,7 +27,7 @@ class WashingMachineController {
       req: express.Request,
       res: express.Response,
   ): Promise<void> {
-    const status: boolean = req.body.status;
+    const status: boolean = JSON.parse(req.params.status);
 
     try {
       const machines: WashingMachineDocumentInterface[] = await WashingMachineModel.find(

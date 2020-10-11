@@ -4,8 +4,7 @@ import {WashingMachineCtrl} from '../controllers/WashingMachineController'
 const router: express.Router = express.Router()
 
 router.get('/', WashingMachineCtrl.getAll)
-router.get('/model', WashingMachineCtrl.getMachinesByModel)
-router.get('/status', WashingMachineCtrl.getMachinesByStatus)
+router.get('/status/:status', WashingMachineCtrl.getMachinesByStatus)
 
 router.post('/', WashingMachineCtrl.addNewMachine)
 

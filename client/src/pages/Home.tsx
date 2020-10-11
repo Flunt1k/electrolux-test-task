@@ -9,13 +9,17 @@ import CircularProgress
 import Snackbar from '@material-ui/core/Snackbar/Snackbar';
 import Alert from '@material-ui/lab/Alert/Alert';
 import TextField from '@material-ui/core/TextField/TextField';
+import Button from '@material-ui/core/Button';
 
 import ModalAddBlock from '../components/ModalAddBlock';
 
 import {IWashingMachine} from '../interfaces';
 import {typedUseSelector} from '../redux/store';
 import {useDispatch} from 'react-redux';
-import {fetchAllMachines} from '../redux/washingMachines/thunksActionFunctions';
+import {
+  fetchAllMachines,
+  fetchMachinesByStatus,
+} from '../redux/washingMachines/thunksActionFunctions';
 import {searching} from '../redux/washingMachines/actionCreators';
 import {
   hideErrorAlert,
@@ -176,6 +180,7 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
   const searchingMachines = typedUseSelector(
       state => state.washingMachine.searchingMachines);
   const [search, setSearch] = React.useState<string>('');
+  const [buttonDisabled, setButtonDisabled] = React.useState<string>('all');
   const handleOnChangeSearch = (e: React.ChangeEvent) => {
     const element = e.target as HTMLInputElement;
     setSearch(() => {
@@ -186,6 +191,9 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
       }
       return element.value;
     });
+  };
+  const handleClickDisableButton = (type: string) => {
+    setButtonDisabled(type);
   };
 
   const checkSearching = () => {
@@ -217,6 +225,36 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
                        onChange={(e: React.ChangeEvent) => handleOnChangeSearch(
                            e)}
             />
+            <Button variant="contained"
+                    disabled={buttonDisabled === 'all'}
+                    color="primary"
+                    style={{marginRight: 10, marginTop: 20, marginLeft: 20}}
+                    onClick={() => {
+                      handleClickDisableButton('all');
+                      dispatch(fetchAllMachines());
+                    }}>
+              Показать все машины
+            </Button>
+            <Button variant="contained"
+                    disabled={buttonDisabled === 'allOn'}
+                    color="primary"
+                    style={{marginRight: 10, marginTop: 20}}
+                    onClick={() => {
+                      handleClickDisableButton('allOn');
+                      dispatch(fetchMachinesByStatus(true));
+                    }}>
+              Показать все включенные
+            </Button>
+            <Button variant="contained"
+                    disabled={buttonDisabled === 'allOff'}
+                    color="primary"
+                    style={{marginRight: 10, marginTop: 20}}
+                    onClick={() => {
+                      handleClickDisableButton('allOff');
+                      dispatch(fetchMachinesByStatus(false));
+                    }}>
+              Показать все выключенные
+            </Button>
           </Container>
           <Grid container spacing={4} style={{marginTop: 10}}>
             {!isLoading ?

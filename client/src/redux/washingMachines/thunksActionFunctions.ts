@@ -1,8 +1,13 @@
 import {IMachineErrors, IWashingMachine} from '../../interfaces';
 import {
   createNewMachine,
-  deleteMachine, deleteMachinesByModel,
-  getAllMachines, updateMachine, updateMachineErrorList, updateMachineStatus,
+  deleteMachine,
+  deleteMachinesByModel,
+  getAllMachines,
+  getMachinesByStatus,
+  updateMachine,
+  updateMachineErrorList,
+  updateMachineStatus,
 } from './actionCreators';
 import {Dispatch} from 'redux';
 import {
@@ -123,4 +128,16 @@ export const fetchUpdateErrorList = (error: IMachineErrors, serialNumber: number
   )
 
   if (status) dispatch(updateMachineErrorList(result.data.errorList, result.data.serialNumber))
+}
+
+export const fetchMachinesByStatus = (machineState: boolean): Function => async (dispatch: Dispatch): Promise<void> => {
+  const response = await fetch(`/api/washingMachine/status/${machineState}`)
+  const result = await response.json()
+  const status = checkStatus(
+      result.status,
+      dispatch,
+      result.message || `Показаны только ${machineState? 'включенные' : 'выключенные'} машины`
+  )
+
+  if (status) dispatch(getMachinesByStatus(result.data))
 }
