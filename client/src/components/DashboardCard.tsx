@@ -27,6 +27,7 @@ import {
 } from '../redux/washingMachines/thunksActionFunctions';
 import {useDispatch} from 'react-redux';
 import validation from '../utils/validation';
+import {showErrorAlert} from '../redux/dashboard/actionCreators';
 
 interface DashboardCardProps {
   data: IWashingMachine,
@@ -57,6 +58,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
   const handleClickEditToggle = (): void => {
     setEditState(prevSate => !prevSate);
     if (editState) {
+      console.log(editFormValues);
+      if (editFormValues.model === '' || editFormValues.dateOfManufacture === ''){
+        dispatch(showErrorAlert('Поля не заполнены!'))
+        setEditState(prevState => !prevState)
+        return
+      }
       if (editFormValues.serialNumber !== data.serialNumber) {
         const isValid = validation(editFormValues);
         if (isValid.status) {
