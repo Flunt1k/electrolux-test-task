@@ -8,7 +8,6 @@ import {
   DELETE_MACHINE,
   DELETE_MACHINES_BY_MODEL,
   GET_ALL_MACHINES,
-  GET_MACHINES_BY_MODEL,
   GET_MACHINES_BY_STATUS, SEARCH,
   UPDATE_MACHINE,
   UPDATE_MACHINE_ERROR_LIST,
@@ -22,11 +21,6 @@ export const getAllMachines = (machines: IWashingMachine[]): WashingMachineActio
     payload: machines
   });
 }
-
-export const getMachinesByModel = (machines: IWashingMachine[]): WashingMachineActionTypes => ({
-  type: GET_MACHINES_BY_MODEL,
-  payload: machines,
-});
 
 export const getMachinesByStatus = (machines: IWashingMachine[]): WashingMachineActionTypes => ({
   type: GET_MACHINES_BY_STATUS,

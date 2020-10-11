@@ -5,7 +5,6 @@ import {
 } from '../../interfaces';
 
 export const GET_ALL_MACHINES = 'GET_ALL_MACHINES';
-export const GET_MACHINES_BY_MODEL = 'GET_MACHINES_BY_MODEL';
 export const GET_MACHINES_BY_STATUS = 'GET_MACHINES_BY_STATUS';
 export const CREATE_MACHINE = 'CREATE_MACHINE';
 export const DELETE_MACHINE = 'DELETE_MACHINE';
@@ -18,11 +17,6 @@ export const SEARCH = 'SEARCH'
 interface GetMachinesAction {
   type: typeof GET_ALL_MACHINES
   payload: IWashingMachine[]
-}
-
-interface GetMachinesByModelAction {
-  type: typeof GET_MACHINES_BY_MODEL;
-  payload: IWashingMachine[];
 }
 
 interface GetMachinesByStatusAction {
@@ -70,7 +64,6 @@ interface SearchingAction {
 
 export type WashingMachineActionTypes =
     GetMachinesAction
-    | GetMachinesByModelAction
     | GetMachinesByStatusAction
     | CreateMachineAction
     | DeleteMachinesByModelAction

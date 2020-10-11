@@ -23,34 +23,6 @@ class WashingMachineController {
     }
   }
 
-  async getMachinesByModel(
-      req: express.Request,
-      res: express.Response,
-  ): Promise<void> {
-    const model: string = req.body.model;
-
-    try {
-      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel.find(
-          {model}).exec();
-
-      if (!machines.length) {
-        res.status(404).json({
-          status: 'failed',
-          message: `Машины по модели ${model} не найдены!`,
-        });
-        return;
-      }
-
-      res.status(200).json({
-        status: 'success',
-        data: machines,
-      });
-
-    } catch (err) {
-      errorHandler(err, res);
-    }
-  }
-
   async getMachinesByStatus(
       req: express.Request,
       res: express.Response,

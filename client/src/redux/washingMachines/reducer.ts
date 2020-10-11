@@ -22,11 +22,6 @@ export const washingMachineReducer = (
         ...state,
         washingMachines: [...action.payload],
       };
-    case 'GET_MACHINES_BY_MODEL':
-      return {
-        ...state,
-        washingMachines: [...action.payload],
-      };
     case 'GET_MACHINES_BY_STATUS':
       return {
         ...state,
