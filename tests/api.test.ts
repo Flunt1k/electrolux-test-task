@@ -1,16 +1,20 @@
 import request from 'supertest';
 import supertest from 'supertest';
-import mongoose, {Connection} from 'mongoose';
+import mongoose, {Connection, Model} from 'mongoose';
 
 import {app} from '../app';
 import {keys} from '../keys/keys';
-import {IWashingMachine, WashingMachineModel} from '../models/WashingMachine';
+import {
+  IWashingMachine, WashingMachineDocumentInterface,
+  WashingMachineSchema,
+} from '../models/WashingMachine';
 
 import DoneCallback = jest.DoneCallback;
 import {IMachineErrors} from '../client/src/interfaces';
 
 describe('Tests for endpoints', () => {
   let conn: Connection;
+  let testingModel: Model<WashingMachineDocumentInterface>
   beforeAll(async (): Promise<void> => {
     conn = mongoose.createConnection(keys.MONGO_LOCAL, {
       useNewUrlParser: true,
@@ -22,7 +26,7 @@ describe('Tests for endpoints', () => {
     conn.on('error', (): void => {
       throw new Error(`unable to connect to db: ${keys.MONGO_LOCAL}`);
     });
-
+     testingModel = conn.model<WashingMachineDocumentInterface>('TestModel', WashingMachineSchema)
     await request(app).post('/api/washingMachine').send({
       serialNumber: 388,
       model: 'testing model',
@@ -31,7 +35,7 @@ describe('Tests for endpoints', () => {
   });
 
   afterAll(async (): Promise<void> => {
-    await WashingMachineModel.deleteMany({}).exec();
+    await testingModel.deleteMany({}).exec();
     await conn.close();
   });
 
@@ -284,13 +288,13 @@ describe('Tests for endpoints', () => {
             send({
               model,
             });
-        const dbData = await WashingMachineModel.find({}).exec();
+        const dbData = await testingModel.find({}).exec();
         const {status, data, message}: { status: string, message: string, data: undefined } = response.body;
         expect(response.status).toBe(404);
         expect(status).toBe('failed');
         expect(message).toContain('не найдены');
         expect(data).toBeUndefined();
-        expect(dbData.length).toEqual(1);
+        expect(dbData.length).toEqual(0);
         done();
       });
 
@@ -303,7 +307,7 @@ describe('Tests for endpoints', () => {
             send({
               model,
             });
-        const dbData = await WashingMachineModel.find({}).exec();
+        const dbData = await testingModel.find({}).exec();
         const {status, data, message}: { status: string, data: string, message: undefined } = response.body;
         expect(response.status).toBe(200);
         expect(status).toBe('success');

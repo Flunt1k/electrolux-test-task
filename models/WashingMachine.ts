@@ -13,7 +13,7 @@ export interface IWashingMachine {
 
 export type WashingMachineDocumentInterface = IWashingMachine & Document;
 
-const WashingMachineSchema = new Schema<IWashingMachine>({
+export const WashingMachineSchema = new Schema<IWashingMachine>({
   model: {
     type: String,
     required: true,
