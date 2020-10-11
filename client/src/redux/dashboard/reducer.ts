@@ -1,6 +1,6 @@
 import {DashboardActionTypes} from './actionTypes';
 
-interface DashboardState {
+export interface DashboardState {
   error: string,
   failed: string,
   loading: boolean

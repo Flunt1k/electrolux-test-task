@@ -18,7 +18,7 @@ import {useErrorForm} from '../hooks/useErrorForm';
 
 interface ModalBlockProps {
   classes: ReturnType<typeof useHomeStyles>;
-  errors: IMachineErrors[];
+  errors?: IMachineErrors[] | undefined;
   serialNumber: number;
   visible: boolean;
   onClose: () => void;
@@ -46,7 +46,7 @@ const ModalErrorBlock: React.FC<ModalBlockProps> = ({
           </IconButton>
         </DialogTitle>
         <DialogContent style={{margin: '0 auto', minWidth: '100%'}} dividers>
-          {errors.length ?
+          {errors && errors.length ?
               <Paper className={classes.listOfErrors}>
                 <List>
                   {errors.map((error: IMachineErrors) => {

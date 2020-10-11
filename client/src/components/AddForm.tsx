@@ -9,7 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {MainFormInterface} from '../interfaces';
 
 
-const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState}:MainFormInterface): React.ReactElement => {
+const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState, validation}:MainFormInterface): React.ReactElement => {
 
   return (
       <>
@@ -19,6 +19,9 @@ const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState}:MainF
             name="model"
             type="text"
             fullWidth
+            error={!Boolean(dataState.model)}
+            helperText={Boolean(dataState.model) ? '' : 'Поле должно быть' +
+                ' заполнено'}
             value={dataState.model}
             onChange={changeDataState}
         />
@@ -28,19 +31,23 @@ const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState}:MainF
             name="serialNumber"
             type="text"
             fullWidth
+            error={Boolean(validation) || !Boolean(dataState.serialNumber)}
+            helperText={Boolean(validation) ? validation : 'Поле должно быть' +
+                ' заполнено'}
             value={isNaN(dataState.serialNumber) ? '' : dataState.serialNumber}
             onChange={changeDataState}
         />
         <TextField
             margin="dense"
             label="Циклов работы"
+            placeholder={'Необязательное поле'}
             name="washingCycles"
             type="text"
             fullWidth
-            value={isNaN(dataState.washingCycles) ? '' : dataState.washingCycles}
+            value={dataState?.washingCycles?.toString() && isNaN(dataState.washingCycles) ? '' : dataState.washingCycles}
             onChange={changeDataState}
         />
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" style={{marginTop: 10}}>
           <FormLabel component="legend">Статус</FormLabel>
           <RadioGroup aria-label="gender" name="status" value={dataState.status} onChange={changeDataState}>
             <FormControlLabel value={true} control={<Radio />} label="Включена" />
@@ -53,6 +60,9 @@ const AddForm: React.FC<MainFormInterface> = ({dataState, changeDataState}:MainF
             label="Дата производства"
             type="date"
             name="dateOfManufacture"
+            error={!Boolean(dataState.dateOfManufacture)}
+            helperText={Boolean(dataState.dateOfManufacture) ? '' : 'Поле должно быть' +
+                ' заполнено'}
             InputLabelProps={{
               shrink: true,
             }}

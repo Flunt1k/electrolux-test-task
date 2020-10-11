@@ -1,5 +1,5 @@
 import express from 'express';
-import moment from 'moment';
+// import moment from 'moment';
 
 import errorHandler from '../utils/errorHandler';
 import {
@@ -79,11 +79,11 @@ class WashingMachineController {
       req: express.Request,
       res: express.Response,
   ): Promise<void> {
-    const date: string = moment(req.body.date).format('DD.MM.YYYY');
+    // const date: string = moment(req.body.date).format('DD.MM.YYYY');
     const data: IWashingMachine = {
       model: req.body.model,
       serialNumber: req.body.serialNumber,
-      dateOfManufacture: date,
+      dateOfManufacture: req.body.dateOfManufacture,
       washingCycles: req.body.washingCycles,
       status: req.body.status,
       historyOfErrors: req.body.historyOfErrors,

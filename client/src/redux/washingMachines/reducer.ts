@@ -4,7 +4,7 @@ import {
   GET_ALL_MACHINES,
 } from './actionTypes';
 
-interface WashingMachineState {
+export interface WashingMachineState {
   washingMachines: IWashingMachine[]
 }
 

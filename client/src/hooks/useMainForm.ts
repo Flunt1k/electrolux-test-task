@@ -4,7 +4,7 @@ import {convertDate} from '../utils/dateConverter';
 
 export const useMainForm = (
     initialState: MainFormStateInterface
-): [MainFormStateInterface, (e: React.ChangeEvent) => void] => {
+): [MainFormStateInterface, (e?: React.ChangeEvent) => void] => {
   initialState = {
     ...initialState,
     'dateOfManufacture': convertDate(initialState.dateOfManufacture
@@ -14,24 +14,27 @@ export const useMainForm = (
       initialState
   );
 
-  const changeState = (e: React.ChangeEvent): void => {
-    const element = e.target as HTMLInputElement;
-    const name: string = element.name;
-    let value: string | boolean | number;
-    switch (name) {
-      case 'status':
-        value = element.value === 'true';
-        break;
-      case 'serialNumber':
-      case 'washingCycles':
-        value = +element.value;
-        break;
-      default:
-        value = element.value;
-        break;
-    }
-
+  const changeState = (e?: React.ChangeEvent): void => {
+    if (!e) {
+      setState(initialState)
+    } else {
+      const element = e.target as HTMLInputElement;
+      const name: string = element.name;
+      let value: string | boolean | number;
+      switch (name) {
+        case 'status':
+          value = element.value === 'true';
+          break;
+        case 'serialNumber':
+        case 'washingCycles':
+          value = +element.value;
+          break;
+        default:
+          value = element.value;
+          break;
+      }
     setState({...state, [name]: value});
+    }
   };
   return [state, changeState];
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import Grid from '@material-ui/core/Grid/Grid';
 import DashboardCard from '../components/DashboardCard';
@@ -7,6 +7,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import {IWashingMachine} from '../interfaces';
 import ModalAddBlock from '../components/ModalAddBlock';
+
+import {typedUseSelector} from '../redux/store';
+import {useDispatch} from 'react-redux';
+import {fetchAllMachines} from '../redux/washingMachines/thunksActionFunctions';
 
 export const useHomeStyles = makeStyles(() => ({
   media: {
@@ -136,41 +140,20 @@ interface HomeInterface {
 
 const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInterface): React.ReactElement => {
   const classes = useHomeStyles();
-  const mockData: Array<IWashingMachine> = [
-    {
-      _id: '1',
-      model: 'first model',
-      serialNumber: 392,
-      dateOfManufacture: '24.09.2021',
-      status: true,
-      washingCycles: 12,
-      historyOfErrors: [
-        {code: 'E201', errorText: 'Поломка барабана'},
-        {code: 'E401', errorText: 'Отключение питания'},
-        {code: 'D201', errorText: 'Поломка шланга'},
-        {code: 'K7011', errorText: 'Экстренное отключение'},
-
-      ],
-    },
-    {
-      _id: '2',
-      model: 'second model',
-      serialNumber: 122,
-      dateOfManufacture: '21.11.2034',
-      status: false,
-      washingCycles: 12,
-      historyOfErrors: [],
-    },
-  ];
+  const dispatch = useDispatch()
+  const machines = typedUseSelector(state => state.washingMachine);
+  useEffect(() => {
+    dispatch(fetchAllMachines())
+  }, [dispatch])
 
   return (
       <>
         <Container>
           <Grid container spacing={4} style={{marginTop: 10}}>
-            {mockData.map(
-                machine => <DashboardCard key={machine._id}
-                                          data={machine}
-                                          classes={classes}/>)}
+            {machines.washingMachines.map(
+                (machine: IWashingMachine) => <DashboardCard key={machine._id}
+                                                             data={machine}
+                                                             classes={classes}/>)}
           </Grid>
         </Container>
         <ModalAddBlock classes={classes}
