@@ -10,6 +10,11 @@ export interface IWashingMachine {
   historyOfErrors: Array<IMachineErrors>
 }
 
+export interface UpdateStatusInterface {
+  status: boolean;
+  serialNumber: number
+}
+
 export interface MainFormInterface {
   dataState: MainFormStateInterface;
   changeDataState: (e: React.ChangeEvent) => void

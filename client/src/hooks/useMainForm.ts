@@ -1,6 +1,6 @@
 import React from 'react';
 import {MainFormStateInterface} from '../interfaces';
-import {convertDate} from '../utils/dataConverter';
+import {convertDate} from '../utils/dateConverter';
 
 export const useMainForm = (
     initialState: MainFormStateInterface

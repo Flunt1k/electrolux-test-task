@@ -1,4 +1,4 @@
-import {IWashingMachine, UpdateStatusInterface} from '../interfaces';
+import {IWashingMachine, UpdateStatusInterface} from '../../interfaces';
 
 export const GET_ALL_MACHINES = 'GET_ALL_MACHINES';
 export const GET_MACHINES_BY_MODEL = 'GET_MACHINES_BY_MODEL';
@@ -7,42 +7,54 @@ export const CREATE_MACHINE = 'CREATE_MACHINE';
 export const DELETE_MACHINE = 'DELETE_MACHINE';
 export const DELETE_MACHINES_BY_MODEL = 'DELETE_MACHINES_BY_MODEL';
 export const UPDATE_MACHINE = 'UPDATE_MACHINE';
-export const UPDATE_MACHINE_BY_MODEL = 'UPDATE_MACHINE_BY_MODEL'
 export const UPDATE_MACHINE_STATUS = 'UPDATE_MACHINE_STATUS';
-export const ERROR = 'ERROR';
-export const FAILED = 'FAILED'
-export const START_LOADING = 'START_LOADING'
-export const FINISH_LOADING = 'FINISH_LOADING'
 
-interface Action {
-  type: string;
-}
-
-interface GetArrayOfMachinesAction extends Action {
+interface GetMachinesAction {
+  type: typeof GET_ALL_MACHINES
   payload: IWashingMachine[]
 }
 
-interface GetOneMachineAction extends Action {
-  payload: IWashingMachine
+interface GetMachinesByModelAction {
+  type: typeof GET_MACHINES_BY_MODEL;
+  payload: IWashingMachine[];
 }
 
-interface DeleteMachineAction extends Action {
-  payload: string
+interface GetMachinesByStatusAction {
+  type: typeof GET_MACHINES_BY_STATUS;
+  payload: IWashingMachine[];
 }
 
-
-interface ErrorOrFailedAction extends Action {
-  payload: string
+interface CreateMachineAction {
+  type: typeof CREATE_MACHINE;
+  payload: IWashingMachine;
 }
 
-interface UpdateStatusAction extends Action {
-  payload: UpdateStatusInterface
+interface DeleteMachineAction {
+  type: typeof DELETE_MACHINE;
+  serialNumber: number;
 }
 
-export type DashboardActionTypes =
-    GetArrayOfMachinesAction
-    | GetOneMachineAction
+interface DeleteMachinesByModelAction {
+  type: typeof DELETE_MACHINES_BY_MODEL;
+  model: string;
+}
+
+interface UpdateMachineAction {
+  type: typeof UPDATE_MACHINE;
+  payload: IWashingMachine;
+}
+
+interface UpdateMachineStatus {
+  type: typeof UPDATE_MACHINE_STATUS;
+  data: UpdateStatusInterface;
+}
+
+export type WashingMachineActionTypes =
+    GetMachinesAction
+    | GetMachinesByModelAction
+    | GetMachinesByStatusAction
+    | CreateMachineAction
+    | DeleteMachinesByModelAction
     | DeleteMachineAction
-    | UpdateStatusAction
-    | ErrorOrFailedAction
-
+    | UpdateMachineAction
+    | UpdateMachineStatus

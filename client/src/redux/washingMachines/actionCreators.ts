@@ -1,58 +1,55 @@
-import {IWashingMachine, UpdateStatusInterface} from '../interfaces';
+import {IWashingMachine, UpdateStatusInterface} from '../../interfaces';
 import {
   CREATE_MACHINE,
-  DashboardActionTypes,
+  WashingMachineActionTypes,
   DELETE_MACHINE,
   DELETE_MACHINES_BY_MODEL,
   GET_ALL_MACHINES,
   GET_MACHINES_BY_MODEL,
   GET_MACHINES_BY_STATUS,
   UPDATE_MACHINE,
-  UPDATE_MACHINE_BY_MODEL, UPDATE_MACHINE_STATUS,
+  UPDATE_MACHINE_STATUS,
 } from './actionTypes';
 
-export const getAllMachines = (machines: Array<IWashingMachine>): DashboardActionTypes => ({
-  type: GET_ALL_MACHINES,
+export const getAllMachines = (machines: IWashingMachine[]): WashingMachineActionTypes => {
+  return ({
+    type: GET_ALL_MACHINES,
+    payload: machines
+  });
+}
+
+export const getMachinesByModel = (machines: IWashingMachine[]): WashingMachineActionTypes => ({
+  type: GET_MACHINES_BY_MODEL,
   payload: machines,
 });
 
-export const getMachinesByModel = (machines: IWashingMachine[]): DashboardActionTypes => ({
-  type: GET_MACHINES_BY_MODEL,
-  payload: machines
-})
-
-export const getMachinesByStatus = (machines: IWashingMachine[]): DashboardActionTypes => ({
+export const getMachinesByStatus = (machines: IWashingMachine[]): WashingMachineActionTypes => ({
   type: GET_MACHINES_BY_STATUS,
-  payload: machines
-})
+  payload: machines,
+});
 
-export const createNewMachine = (machine: IWashingMachine): DashboardActionTypes => ({
+export const createNewMachine = (machine: IWashingMachine): WashingMachineActionTypes => ({
   type: CREATE_MACHINE,
-  payload: machine
-})
+  payload: machine,
+});
 
-export const deleteMachine = (serialNumber: string): DashboardActionTypes => ({
+export const deleteMachine = (serialNumber: number): WashingMachineActionTypes => ({
   type: DELETE_MACHINE,
-  payload: serialNumber
-})
+  serialNumber,
+});
 
-export const deleteMachinesByModel = (model: string): DashboardActionTypes => ({
+export const deleteMachinesByModel = (model: string): WashingMachineActionTypes => ({
   type: DELETE_MACHINES_BY_MODEL,
-  payload: model
-})
+  model,
+});
 
-export const updateMachine = (machine: IWashingMachine): DashboardActionTypes => ({
+export const updateMachine = (machine: IWashingMachine): WashingMachineActionTypes => ({
   type: UPDATE_MACHINE,
-  payload: machine
-})
+  payload: machine,
+});
 
-export const updateMachinesByModel = (machines: IWashingMachine[]): DashboardActionTypes => ({
-  type: UPDATE_MACHINE_BY_MODEL,
-  payload: machines
-})
-
-export const updateMachineStatus = (status: UpdateStatusInterface): DashboardActionTypes => ({
+export const updateMachineStatus = (status: UpdateStatusInterface): WashingMachineActionTypes => ({
   type: UPDATE_MACHINE_STATUS,
-  payload: status
-})
+  data: status,
+});
 
