@@ -4,10 +4,11 @@ import Grid from '@material-ui/core/Grid/Grid';
 import DashboardCard from '../components/DashboardCard';
 import Container from '@material-ui/core/Container/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 
-import {IWashingMachine} from '../interfaces';
 import ModalAddBlock from '../components/ModalAddBlock';
 
+import {IWashingMachine} from '../interfaces';
 import {typedUseSelector} from '../redux/store';
 import {useDispatch} from 'react-redux';
 import {fetchAllMachines} from '../redux/washingMachines/thunksActionFunctions';
@@ -131,6 +132,14 @@ export const useHomeStyles = makeStyles(() => ({
     top: 0,
   },
 
+  loader: {
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+
 }));
 
 interface HomeInterface {
@@ -141,6 +150,7 @@ interface HomeInterface {
 const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInterface): React.ReactElement => {
   const classes = useHomeStyles();
   const dispatch = useDispatch()
+  const isLoading = typedUseSelector(state => state.dashboard.loading)
   const machines = typedUseSelector(state => state.washingMachine);
   useEffect(() => {
     dispatch(fetchAllMachines())
@@ -150,10 +160,16 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
       <>
         <Container>
           <Grid container spacing={4} style={{marginTop: 10}}>
-            {machines.washingMachines.map(
+            {!isLoading ?
+                machines.washingMachines.map(
                 (machine: IWashingMachine) => <DashboardCard key={machine._id}
                                                              data={machine}
-                                                             classes={classes}/>)}
+                                                             classes={classes}/>)
+                :
+                <div className={classes.loader}>
+                  <CircularProgress size={200}/>
+                </div>
+            }
           </Grid>
         </Container>
         <ModalAddBlock classes={classes}

@@ -1,9 +1,14 @@
 import {IWashingMachine} from '../../interfaces';
 import {createNewMachine, getAllMachines} from './actionCreators';
 import {Dispatch} from 'redux';
-import {showErrorAlert} from '../dashboard/actionCreators';
+import {
+  finishLoading,
+  showErrorAlert,
+  startLoading,
+} from '../dashboard/actionCreators';
 
 export const fetchCreateMachine = (body: IWashingMachine): Function => async (dispatch: Dispatch): Promise<void> => {
+  dispatch(startLoading())
   const response = await fetch('/api/washingMachine', {
     method: 'POST',
     headers: {
@@ -12,7 +17,8 @@ export const fetchCreateMachine = (body: IWashingMachine): Function => async (di
     body: JSON.stringify(body)
   })
   const result = await response.json()
-  if (result.message) {
+  dispatch(finishLoading())
+  if (result.status === 'error') {
     dispatch(showErrorAlert(result.message))
     return
   }
@@ -20,11 +26,13 @@ export const fetchCreateMachine = (body: IWashingMachine): Function => async (di
 }
 
 export const fetchAllMachines = (): Function => async (dispatch: Dispatch): Promise<void> => {
-  const response = await fetch('/api/washingMachine')
-  const result = await response.json()
-  if (result.message) {
-    dispatch(showErrorAlert(result.message))
-    return
-  }
-  dispatch(getAllMachines(result.data))
+  dispatch(startLoading())
+    const response = await fetch('/api/washingMachine')
+    const result = await response.json()
+    dispatch(finishLoading())
+    if (result.message) {
+      dispatch(showErrorAlert(result.message))
+      return
+    }
+    dispatch(getAllMachines(result.data))
 }
