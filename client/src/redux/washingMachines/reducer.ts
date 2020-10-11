@@ -1,22 +1,23 @@
 import {IWashingMachine} from '../../interfaces';
 import {
   WashingMachineActionTypes,
-  GET_ALL_MACHINES,
 } from './actionTypes';
 
 export interface WashingMachineState {
-  washingMachines: IWashingMachine[]
+  washingMachines: IWashingMachine[];
+  searchingMachines: IWashingMachine[];
 }
 
 const initialState: WashingMachineState = {
   washingMachines: [],
+  searchingMachines: [],
 };
 
 export const washingMachineReducer = (
     state: WashingMachineState = initialState,
     action: WashingMachineActionTypes): WashingMachineState => {
   switch (action.type) {
-    case GET_ALL_MACHINES:
+    case 'GET_ALL_MACHINES':
       return {
         ...state,
         washingMachines: [...action.payload],
@@ -71,9 +72,29 @@ export const washingMachineReducer = (
             },
         ),
       };
+    case 'UPDATE_MACHINE_ERROR_LIST':
+      return {
+        ...state,
+        washingMachines: state.washingMachines.map(
+            machine => {
+              if (machine.serialNumber === action.data.serialNumber) {
+                machine.historyOfErrors?.push(...action.data.errorState);
+              }
+              return machine;
+            },
+        ),
+      };
+    case 'SEARCH':
+      const regex = new RegExp(action.input || '', 'g')
+      return {
+        ...state,
+        searchingMachines: action.input ? state.washingMachines.filter(
+            machine => +(machine.serialNumber.toString().search(regex)) + 1
+        ) : []
+      };
     default:
       return state;
   }
 };
 
-export default washingMachineReducer
+export default washingMachineReducer;

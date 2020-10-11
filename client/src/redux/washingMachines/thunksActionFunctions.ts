@@ -1,8 +1,8 @@
-import {IWashingMachine} from '../../interfaces';
+import {IMachineErrors, IWashingMachine} from '../../interfaces';
 import {
   createNewMachine,
   deleteMachine, deleteMachinesByModel,
-  getAllMachines, updateMachine, updateMachineStatus,
+  getAllMachines, updateMachine, updateMachineErrorList, updateMachineStatus,
 } from './actionCreators';
 import {Dispatch} from 'redux';
 import {
@@ -107,4 +107,20 @@ export const fetchUpdateMachineStatus = (serialNumber: number): Function => asyn
       result.message || `Машина ${result.data.status ? 'включена' : 'выключена'}`
   )
   if (status) dispatch(updateMachineStatus(result.data))
+}
+
+export const fetchUpdateErrorList = (error: IMachineErrors, serialNumber: number): Function => async (dispatch: Dispatch): Promise<void> => {
+  const response = await fetch(`/api/washingMachine/errorList/${serialNumber}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({error})
+  })
+  const result = await response.json()
+  const status = checkStatus(
+      result.status,
+      dispatch,
+      result.message || 'Ошибка успешно добавлена!'
+  )
+
+  if (status) dispatch(updateMachineErrorList(result.data.errorList, result.data.serialNumber))
 }

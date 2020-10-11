@@ -1,8 +1,8 @@
 import React from 'react';
-import {ErrorFormStateInterface} from '../interfaces';
+import {IMachineErrors} from '../interfaces';
 
-export const useErrorForm = (initialState: ErrorFormStateInterface): [ErrorFormStateInterface, (e?: React.ChangeEvent) => void] => {
-  const [state, setState] = React.useState<ErrorFormStateInterface>(initialState)
+export const useErrorForm = (initialState: IMachineErrors): [IMachineErrors, (e?: React.ChangeEvent) => void] => {
+  const [state, setState] = React.useState<IMachineErrors>(initialState)
   const changeState = (e?: React.ChangeEvent):void => {
     if (!e) {
       setState({code: '', errorText: ''})

@@ -15,6 +15,9 @@ import {IMachineErrors} from '../interfaces';
 import ErrorForm from './ErrorForm';
 
 import {useErrorForm} from '../hooks/useErrorForm';
+import {useDispatch} from 'react-redux';
+import {showErrorAlert} from '../redux/dashboard/actionCreators';
+import {fetchUpdateErrorList} from '../redux/washingMachines/thunksActionFunctions';
 
 interface ModalBlockProps {
   classes: ReturnType<typeof useHomeStyles>;
@@ -31,7 +34,17 @@ const ModalErrorBlock: React.FC<ModalBlockProps> = ({
   visible,
   onClose,
 }: ModalBlockProps): React.ReactElement => {
+  const dispatch = useDispatch()
   const [errorInputs, setErrorInputs] = useErrorForm({code: '', errorText: ''});
+
+  const handleClickAddError = (): void => {
+    if (errorInputs.code === '' || errorInputs.errorText === '') {
+      dispatch(showErrorAlert('Все поля должны быть заполнены!'))
+      return
+    }
+    dispatch(fetchUpdateErrorList(errorInputs, serialNumber))
+    setErrorInputs();
+  };
 
   return (
       <Dialog open={visible} onClose={onClose}
@@ -63,8 +76,11 @@ const ModalErrorBlock: React.FC<ModalBlockProps> = ({
               <h2>Ошибки отсутствуют</h2>
           }
           <h4 style={{marginBottom: 0}}>Добавить ошибку</h4>
-          <ErrorForm classes={classes} changeErrorState={setErrorInputs}
-                     errorState={errorInputs}/>
+          <ErrorForm classes={classes}
+                     changeErrorState={setErrorInputs}
+                     errorState={errorInputs}
+                     handleClickAddError={handleClickAddError}
+          />
         </DialogContent>
       </Dialog>
   );

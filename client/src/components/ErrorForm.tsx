@@ -2,19 +2,17 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {useHomeStyles} from '../pages/Home';
-import {ErrorFormStateInterface} from '../interfaces';
+import {IMachineErrors} from '../interfaces';
 
 interface ErrorFormInterface {
   classes: ReturnType<typeof useHomeStyles>;
-  errorState: ErrorFormStateInterface;
-  changeErrorState: (e?: React.ChangeEvent) => void
+  errorState: IMachineErrors;
+  changeErrorState: (e?: React.ChangeEvent) => void;
+  handleClickAddError: () => void;
 }
 
-const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErrorState}: ErrorFormInterface): React.ReactElement => {
+const ErrorForm: React.FC<ErrorFormInterface> = ({classes, errorState, changeErrorState, handleClickAddError}: ErrorFormInterface): React.ReactElement => {
 
-  const handleClickAddError = (): void => {
-    changeErrorState();
-  };
   return (
       <>
         <TextField

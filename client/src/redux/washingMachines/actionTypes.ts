@@ -1,4 +1,8 @@
-import {IWashingMachine, UpdateStatusInterface} from '../../interfaces';
+import {
+  IMachineErrors,
+  IWashingMachine,
+  UpdateStatusInterface,
+} from '../../interfaces';
 
 export const GET_ALL_MACHINES = 'GET_ALL_MACHINES';
 export const GET_MACHINES_BY_MODEL = 'GET_MACHINES_BY_MODEL';
@@ -8,6 +12,8 @@ export const DELETE_MACHINE = 'DELETE_MACHINE';
 export const DELETE_MACHINES_BY_MODEL = 'DELETE_MACHINES_BY_MODEL';
 export const UPDATE_MACHINE = 'UPDATE_MACHINE';
 export const UPDATE_MACHINE_STATUS = 'UPDATE_MACHINE_STATUS';
+export const UPDATE_MACHINE_ERROR_LIST = 'UPDATE_MACHINE_ERROR_LIST';
+export const SEARCH = 'SEARCH'
 
 interface GetMachinesAction {
   type: typeof GET_ALL_MACHINES
@@ -44,9 +50,22 @@ interface UpdateMachineAction {
   payload: IWashingMachine;
 }
 
-interface UpdateMachineStatus {
+interface UpdateMachineStatusAction {
   type: typeof UPDATE_MACHINE_STATUS;
   data: UpdateStatusInterface;
+}
+
+interface UpdateMachineErrorListAction {
+  type: typeof UPDATE_MACHINE_ERROR_LIST;
+  data: {
+    errorState: IMachineErrors[];
+    serialNumber: number;
+  }
+}
+
+interface SearchingAction {
+ type: typeof SEARCH;
+ input: string | undefined
 }
 
 export type WashingMachineActionTypes =
@@ -57,4 +76,6 @@ export type WashingMachineActionTypes =
     | DeleteMachinesByModelAction
     | DeleteMachineAction
     | UpdateMachineAction
-    | UpdateMachineStatus
+    | UpdateMachineStatusAction
+    | UpdateMachineErrorListAction
+|SearchingAction

@@ -58,7 +58,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
   const handleClickEditToggle = (): void => {
     setEditState(prevSate => !prevSate);
     if (editState) {
-      console.log(editFormValues);
       if (editFormValues.model === '' || editFormValues.dateOfManufacture === ''){
         dispatch(showErrorAlert('Поля не заполнены!'))
         setEditState(prevState => !prevState)

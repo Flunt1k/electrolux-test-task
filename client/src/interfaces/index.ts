@@ -33,8 +33,4 @@ export interface MainFormStateInterface  {
   washingCycles?: number,
   status?: boolean
 }
-export interface ErrorFormStateInterface {
-  code: string,
-  errorText: string
-}
 

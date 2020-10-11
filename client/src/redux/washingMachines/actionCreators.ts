@@ -1,14 +1,19 @@
-import {IWashingMachine, UpdateStatusInterface} from '../../interfaces';
+import {
+  IMachineErrors,
+  IWashingMachine,
+  UpdateStatusInterface,
+} from '../../interfaces';
 import {
   CREATE_MACHINE,
-  WashingMachineActionTypes,
   DELETE_MACHINE,
   DELETE_MACHINES_BY_MODEL,
   GET_ALL_MACHINES,
   GET_MACHINES_BY_MODEL,
-  GET_MACHINES_BY_STATUS,
+  GET_MACHINES_BY_STATUS, SEARCH,
   UPDATE_MACHINE,
+  UPDATE_MACHINE_ERROR_LIST,
   UPDATE_MACHINE_STATUS,
+  WashingMachineActionTypes,
 } from './actionTypes';
 
 export const getAllMachines = (machines: IWashingMachine[]): WashingMachineActionTypes => {
@@ -53,3 +58,15 @@ export const updateMachineStatus = (status: UpdateStatusInterface): WashingMachi
   data: status,
 });
 
+export const updateMachineErrorList = (errorState: IMachineErrors[], serialNumber: number): WashingMachineActionTypes => ({
+  type: UPDATE_MACHINE_ERROR_LIST,
+  data: {
+    errorState,
+    serialNumber
+  }
+})
+
+export const searching = (input: string | undefined): WashingMachineActionTypes => ({
+  type: SEARCH,
+  input
+})

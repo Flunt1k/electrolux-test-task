@@ -4,9 +4,11 @@ import Grid from '@material-ui/core/Grid/Grid';
 import DashboardCard from '../components/DashboardCard';
 import Container from '@material-ui/core/Container/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
+import CircularProgress
+  from '@material-ui/core/CircularProgress/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar/Snackbar';
-import Alert from '@material-ui/lab/Alert/Alert'
+import Alert from '@material-ui/lab/Alert/Alert';
+import TextField from '@material-ui/core/TextField/TextField';
 
 import ModalAddBlock from '../components/ModalAddBlock';
 
@@ -14,9 +16,11 @@ import {IWashingMachine} from '../interfaces';
 import {typedUseSelector} from '../redux/store';
 import {useDispatch} from 'react-redux';
 import {fetchAllMachines} from '../redux/washingMachines/thunksActionFunctions';
+import {searching} from '../redux/washingMachines/actionCreators';
 import {
   hideErrorAlert,
-  hideFailedAlert, hideSuccessAlert,
+  hideFailedAlert,
+  hideSuccessAlert,
 } from '../redux/dashboard/actionCreators';
 
 export const useHomeStyles = makeStyles(() => ({
@@ -143,9 +147,16 @@ export const useHomeStyles = makeStyles(() => ({
     height: '100vh',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 
+  searching: {
+    width: 300,
+  },
+
+  filter: {
+    width: 200,
+  },
 }));
 
 interface HomeInterface {
@@ -155,25 +166,61 @@ interface HomeInterface {
 
 const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInterface): React.ReactElement => {
   const classes = useHomeStyles();
-  const dispatch = useDispatch()
-  const isLoading = typedUseSelector(state => state.dashboard.loading)
-  const machines = typedUseSelector(state => state.washingMachine);
-  const error = typedUseSelector(state => state.dashboard.error)
-  const failed = typedUseSelector(state => state.dashboard.failed)
-  const success = typedUseSelector(state => state.dashboard.success)
+  const dispatch = useDispatch();
+  const isLoading = typedUseSelector(state => state.dashboard.loading);
+  const error = typedUseSelector(state => state.dashboard.error);
+  const failed = typedUseSelector(state => state.dashboard.failed);
+  const success = typedUseSelector(state => state.dashboard.success);
+  const machines = typedUseSelector(
+      state => state.washingMachine.washingMachines);
+  const searchingMachines = typedUseSelector(
+      state => state.washingMachine.searchingMachines);
+  const [search, setSearch] = React.useState<string>('');
+  const handleOnChangeSearch = (e: React.ChangeEvent) => {
+    const element = e.target as HTMLInputElement;
+    setSearch(() => {
+      if (element.value) {
+        dispatch(searching(element.value));
+      } else {
+        dispatch(searching(undefined));
+      }
+      return element.value;
+    });
+  };
+
+  const checkSearching = () => {
+    return searchingMachines.length
+        ? searchingMachines.map(
+            (machine: IWashingMachine) => <DashboardCard key={machine._id}
+                                                         data={machine}
+                                                         classes={classes}/>,
+        )
+        : machines.map(
+            (machine: IWashingMachine) => <DashboardCard key={machine._id}
+                                                         data={machine}
+                                                         classes={classes}/>,
+        );
+  };
   useEffect(() => {
-    dispatch(fetchAllMachines())
-  }, [dispatch])
+    dispatch(fetchAllMachines());
+  }, [dispatch]);
 
   return (
       <>
         <Container>
+          <Container>
+            <TextField className={classes.searching}
+                       margin="dense"
+                       label="Поиск по серийному номеру"
+                       type="text"
+                       value={search}
+                       onChange={(e: React.ChangeEvent) => handleOnChangeSearch(
+                           e)}
+            />
+          </Container>
           <Grid container spacing={4} style={{marginTop: 10}}>
             {!isLoading ?
-                machines.washingMachines.map(
-                (machine: IWashingMachine) => <DashboardCard key={machine._id}
-                                                             data={machine}
-                                                             classes={classes}/>)
+                checkSearching()
                 :
                 <div className={classes.loader}>
                   <CircularProgress size={200}/>
@@ -183,21 +230,35 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
         </Container>
         <ModalAddBlock classes={classes}
                        visible={visibleCreateMachine}
-                       onClose={onClose}/>
-        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => dispatch(hideErrorAlert())}>
-          <Alert onClose={() => dispatch(hideErrorAlert())} severity="error">
-            {error}
-          </Alert>
+                       onClose={onClose}
+        />
+        <Snackbar open={Boolean(error)}
+                  autoHideDuration={6000}
+                  onClose={() => dispatch(hideErrorAlert())}
+        >
+          <Alert onClose={() => dispatch(hideErrorAlert())}
+                 severity="error"
+                 children={error}
+          />
+
         </Snackbar>
-        <Snackbar open={Boolean(failed)} autoHideDuration={4000} onClose={() => dispatch(hideFailedAlert())}>
-          <Alert onClose={() => dispatch(hideFailedAlert())} severity="warning">
-            {failed}
-          </Alert>
+        <Snackbar open={Boolean(failed)}
+                  autoHideDuration={4000}
+                  onClose={() => dispatch(hideFailedAlert())}
+        >
+          <Alert onClose={() => dispatch(hideFailedAlert())}
+                 severity="warning"
+                 children={failed}
+          />
         </Snackbar>
-        <Snackbar open={Boolean(success)} autoHideDuration={3000} onClose={() => dispatch(hideSuccessAlert())}>
-          <Alert onClose={() => dispatch(hideSuccessAlert())} severity="success">
-            {success}
-          </Alert>
+        <Snackbar open={Boolean(success)}
+                  autoHideDuration={3000}
+                  onClose={() => dispatch(hideSuccessAlert())}
+        >
+          <Alert onClose={() => dispatch(hideSuccessAlert())}
+                 severity="success"
+                 children={success}
+          />
         </Snackbar>
       </>
   );
