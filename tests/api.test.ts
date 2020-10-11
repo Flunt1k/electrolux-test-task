@@ -1,42 +1,24 @@
 import request from 'supertest';
 import supertest from 'supertest';
-import mongoose, {Connection, Model} from 'mongoose';
 
 import {app} from '../app';
-import {keys} from '../keys/keys';
+
 import {
-  IWashingMachine, WashingMachineDocumentInterface,
-  WashingMachineSchema,
+  IWashingMachine,
+
 } from '../models/WashingMachine';
 
 import DoneCallback = jest.DoneCallback;
 import {IMachineErrors} from '../client/src/interfaces';
 
 describe('Tests for endpoints', () => {
-  let conn: Connection;
-  let testingModel: Model<WashingMachineDocumentInterface>
-  beforeAll(async (): Promise<void> => {
-    conn = mongoose.createConnection(keys.MONGO_LOCAL, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
 
-    conn.on('error', (): void => {
-      throw new Error(`unable to connect to db: ${keys.MONGO_LOCAL}`);
-    });
-     testingModel = conn.model<WashingMachineDocumentInterface>('TestModel', WashingMachineSchema)
+  beforeAll(async (): Promise<void> => {
     await request(app).post('/api/washingMachine').send({
       serialNumber: 388,
       model: 'testing model',
       dateOfManufacture: Date.now().toLocaleString(),
     });
-  });
-
-  afterAll(async (): Promise<void> => {
-    await testingModel.deleteMany({}).exec();
-    await conn.close();
   });
 
   test('POST - /api/washingMachine - empty body',
@@ -95,72 +77,21 @@ describe('Tests for endpoints', () => {
         const response: supertest.Response = await request(app).
             get('/api/washingMachine');
         const {status, data}: { status: string, data: Array<IWashingMachine> } = response.body;
+        expect(response.status).toBe(200)
         expect(status).toBe('success');
         expect(data).toBeInstanceOf(Array);
-        expect(data.length).toEqual(2);
-        expect(data[0].serialNumber).toEqual(388);
         done();
       });
 
-  test('GET - /api/washingMachine/model - get machines with the same model',
+  test('GET - /api/washingMachine/status/:status - get machines with the same' +
+      ' status',
       async (done: DoneCallback): Promise<void> => {
         const response: supertest.Response = await request(app).
-            get('/api/washingMachine/model').
-            send({
-              model: 'testing model',
-            });
+            get('/api/washingMachine/status/true');
         const {status, data}: { status: string, data: Array<IWashingMachine> } = response.body;
         expect(response.status).toBe(200);
         expect(status).toBe('success');
-        expect(data.length).toBe(2);
-        expect(data[1].serialNumber).toEqual(936);
-        expect(data[0].model).toEqual(data[1].model);
-        done();
-      });
-
-  test('GET - /api/washingMachine/model - get failed if model isn\'t exist',
-      async (done: DoneCallback): Promise<void> => {
-        const response: supertest.Response = await request(app).
-            get('/api/washingMachine/model').
-            send({
-              model: 'release machine',
-            });
-        const {status, data, message}: { status: string, data: undefined, message: string } = response.body;
-        expect(response.status).toBe(404);
-        expect(status).toBe('failed');
-        expect(message).toContain('не найдены');
-        expect(data).toBeUndefined();
-        done();
-      });
-
-  test('GET - /api/washingMachine/status - get machines with the same status',
-      async (done: DoneCallback): Promise<void> => {
-        const response: supertest.Response = await request(app).
-            get('/api/washingMachine/status').
-            send({
-              status: true,
-            });
-        const {status, data}: { status: string, data: Array<IWashingMachine> } = response.body;
-        expect(response.status).toBe(200);
-        expect(status).toBe('success');
-        expect(data.length).toEqual(2);
         expect(data[0].status).toEqual(data[1].status);
-        done();
-      });
-
-  test(
-      'GET - /api/washingMachine/status - get an empty array if status isn\'t exist',
-      async (done: DoneCallback): Promise<void> => {
-        const response: supertest.Response = await request(app).
-            get('/api/washingMachine/status').
-            send({
-              status: false,
-            });
-        const {status, data}: { status: string, data: [] } = response.body;
-        expect(response.status).toBe(200);
-        expect(status).toBe('success');
-        expect(data).toBeInstanceOf(Array);
-        expect(data.length).toEqual(0);
         done();
       });
 
@@ -288,13 +219,11 @@ describe('Tests for endpoints', () => {
             send({
               model,
             });
-        const dbData = await testingModel.find({}).exec();
         const {status, data, message}: { status: string, message: string, data: undefined } = response.body;
         expect(response.status).toBe(404);
         expect(status).toBe('failed');
         expect(message).toContain('не найдены');
         expect(data).toBeUndefined();
-        expect(dbData.length).toEqual(0);
         done();
       });
 
@@ -307,13 +236,11 @@ describe('Tests for endpoints', () => {
             send({
               model,
             });
-        const dbData = await testingModel.find({}).exec();
         const {status, data, message}: { status: string, data: string, message: undefined } = response.body;
         expect(response.status).toBe(200);
         expect(status).toBe('success');
         expect(message).toBeUndefined();
         expect(data).toContain(model);
-        expect(dbData.length).toEqual(0);
         done();
       });
 });
