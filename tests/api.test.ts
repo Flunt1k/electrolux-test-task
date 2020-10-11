@@ -7,6 +7,7 @@ import {keys} from '../keys/keys';
 import {IWashingMachine, WashingMachineModel} from '../models/WashingMachine';
 
 import DoneCallback = jest.DoneCallback;
+import {IErrorList} from '../core/interfaces';
 
 describe('Tests for endpoints', () => {
   let conn: Connection;
@@ -124,7 +125,7 @@ describe('Tests for endpoints', () => {
         expect(response.status).toBe(404);
         expect(status).toBe('failed');
         expect(message).toContain('не найдены');
-        expect(data).toBeUndefined()
+        expect(data).toBeUndefined();
         done();
       });
 
@@ -159,6 +160,35 @@ describe('Tests for endpoints', () => {
         done();
       });
 
+  test('PATCH - /api/washingMachine/errorList/:serialNumber - get an updated' +
+      ' error list',
+      async (done: DoneCallback): Promise<void> => {
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/errorList/388').
+            send({
+              error: {code: 'E204', errorText: 'Поломка'},
+            });
+        const {status, data}: { status: string, data: { list: IErrorList, serialNumber: number } } = response.body;
+        expect(status).toBe('success');
+        expect(data.list.listOfErrors.length).toBe(1);
+        done();
+      });
+
+  test('PATCH - /api/washingMachine/errorList/:serialNumber - get failed if' +
+      ' serialNumber isn\'t valid',
+      async (done: DoneCallback): Promise<void> => {
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/errorList/1230').
+            send({
+              error: {code: 'E204', errorText: 'Поломка'},
+            });
+        const {status, data, message}: { status: string, data: undefined, message: string } = response.body;
+        expect(status).toBe('failed');
+        expect(message).toContain('не найдена');
+        expect(data).toBeUndefined();
+        done();
+      });
+
   test('PATCH - /api/washingMachine/:serialNumber - get an updated machine',
       async (done: DoneCallback): Promise<void> => {
         const response: supertest.Response = await request(app).
@@ -189,7 +219,7 @@ describe('Tests for endpoints', () => {
         expect(response.status).toBe(404);
         expect(status).toBe('failed');
         expect(message).toContain('не найдена');
-        expect(data).toBeUndefined()
+        expect(data).toBeUndefined();
         done();
       });
 
@@ -208,14 +238,15 @@ describe('Tests for endpoints', () => {
   test('PATCH - api/washingMachine/status/:serialNumber - update nothing if' +
       ' serial number is wrong',
       async (done: DoneCallback): Promise<void> => {
-    const response: supertest.Response = await request(app).patch('/api/washingMachine/status/0')
-        const {status, data, message}: {status: string, data: undefined, message: string} = response.body
-        expect(response.status).toBe(404)
-        expect(status).toBe('failed')
-        expect(message).toContain('не найдена')
-        expect(data).toBeUndefined()
-        done()
-      })
+        const response: supertest.Response = await request(app).
+            patch('/api/washingMachine/status/0');
+        const {status, data, message}: { status: string, data: undefined, message: string } = response.body;
+        expect(response.status).toBe(404);
+        expect(status).toBe('failed');
+        expect(message).toContain('не найдена');
+        expect(data).toBeUndefined();
+        done();
+      });
 
   test(
       'DELETE - /api/washingMachine/:serialNumber - delete one machine by serial number',
@@ -226,7 +257,7 @@ describe('Tests for endpoints', () => {
         expect(response.status).toBe(200);
         expect(status).toBe('success');
         expect(data).toBe(388);
-        expect(message).toBeUndefined()
+        expect(message).toBeUndefined();
         done();
       });
 
@@ -247,7 +278,7 @@ describe('Tests for endpoints', () => {
       'DELETE - /api/washingMachine/model - delete nothing if model isn\'t' +
       ' exist',
       async (done: DoneCallback): Promise<void> => {
-        const model: string = 'release model'
+        const model: string = 'release model';
         const response: supertest.Response = await request(app).
             delete('/api/washingMachine/model').
             send({
@@ -258,7 +289,7 @@ describe('Tests for endpoints', () => {
         expect(response.status).toBe(404);
         expect(status).toBe('failed');
         expect(message).toContain('не найдены');
-        expect(data).toBeUndefined()
+        expect(data).toBeUndefined();
         expect(dbData.length).toEqual(1);
         done();
       });
@@ -266,20 +297,19 @@ describe('Tests for endpoints', () => {
   test(
       'DELETE - /api/washingMachine/model - delete all machines with the same model',
       async (done: DoneCallback): Promise<void> => {
-        const model: string = 'testing model'
+        const model: string = 'testing model';
         const response: supertest.Response = await request(app).
             delete('/api/washingMachine/model').
             send({
               model,
             });
         const dbData = await WashingMachineModel.find({}).exec();
-        const {status, data, message}: { status: string, data: string, message: undefined} = response.body;
+        const {status, data, message}: { status: string, data: string, message: undefined } = response.body;
         expect(response.status).toBe(200);
         expect(status).toBe('success');
         expect(message).toBeUndefined();
-        expect(data).toContain(model)
+        expect(data).toContain(model);
         expect(dbData.length).toEqual(0);
         done();
       });
-
 });
