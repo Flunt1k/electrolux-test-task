@@ -21,6 +21,12 @@ import ModalErrorBlock from './ModalErrorBlock';
 import EditForm from './EditForm';
 import {useMainForm} from '../hooks/useMainForm';
 import ModalDeleteBlock from './ModalDeleteBlock';
+import {
+  fetchUpdateMachine,
+  fetchUpdateMachineStatus,
+} from '../redux/washingMachines/thunksActionFunctions';
+import {useDispatch} from 'react-redux';
+import validation from '../utils/validation';
 
 interface DashboardCardProps {
   data: IWashingMachine,
@@ -28,8 +34,10 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardCardProps): React.ReactElement => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = React.useState<'Error' | 'Delete'>();
   const [editState, setEditState] = React.useState<boolean>(false);
+  const [validationError, setValidationError] = React.useState<string | undefined>();
   const [editFormValues, setEditFormValues] = useMainForm({
     model: data.model,
     dateOfManufacture: data.dateOfManufacture,
@@ -48,7 +56,24 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
 
   const handleClickEditToggle = (): void => {
     setEditState(prevSate => !prevSate);
+    if (editState) {
+      if (editFormValues.serialNumber !== data.serialNumber) {
+        const isValid = validation(editFormValues);
+        if (isValid.status) {
+          dispatch(fetchUpdateMachine(editFormValues, data.serialNumber));
+        } else {
+          setEditState(prevState => !prevState);
+          setValidationError(isValid.message);
+        }
+      } else {
+        dispatch(fetchUpdateMachine(editFormValues, data.serialNumber))
+      }
+    }
   };
+
+  const handleClickChangeStatus = ():void => {
+    dispatch(fetchUpdateMachineStatus(data.serialNumber))
+  }
 
   return (
       <>
@@ -67,7 +92,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
               {editState ?
                   <>
                     <EditForm dataState={editFormValues}
-                              changeDataState={setEditFormValues}/>
+                              changeDataState={setEditFormValues}
+                              validation={validationError}
+                    />
                   </>
                   :
                   <>
@@ -114,7 +141,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
               <span className={data.status
                   ? classes.statusWorking
                   : classes.statusError}>
-              <Button className={classes.changeStatusBtn} variant={'contained'}>
+              <Button className={classes.changeStatusBtn}
+                      variant={'contained'}
+                onClick={handleClickChangeStatus}
+              >
               <span>{data.status ? 'Выключить' : 'Включить'}</span>
               </Button>
               </span>

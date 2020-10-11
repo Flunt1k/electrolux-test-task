@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField/TextField';
 import { MainFormInterface } from '../interfaces';
 
 
-const EditForm: React.FC<MainFormInterface> = ({dataState, changeDataState}: MainFormInterface): React.ReactElement => {
+const EditForm: React.FC<MainFormInterface> = ({dataState, changeDataState, validation}: MainFormInterface): React.ReactElement => {
 
   return (
       <>
@@ -24,6 +24,8 @@ const EditForm: React.FC<MainFormInterface> = ({dataState, changeDataState}: Mai
             type="text"
             name="serialNumber"
             fullWidth
+            error={Boolean(validation)}
+            helperText={validation}
             value={dataState.serialNumber}
             onChange={changeDataState}
         />

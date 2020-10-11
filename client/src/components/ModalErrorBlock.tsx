@@ -1,5 +1,5 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 import Dialog from '@material-ui/core/Dialog/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
@@ -50,7 +50,7 @@ const ModalErrorBlock: React.FC<ModalBlockProps> = ({
               <Paper className={classes.listOfErrors}>
                 <List>
                   {errors.map((error: IMachineErrors) => {
-                    const key = uuidv4()
+                    const key = uuidv4();
                     return (
                         <ListItem key={key}>
                           <ListItemText><b>Код ошибки: {error.code}</b> || Текст

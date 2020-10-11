@@ -13,6 +13,7 @@ const validation = (machineCandidate: MainFormStateInterface): { status: boolean
       status: false
     }
   }
+
   return {
     status: true
   }

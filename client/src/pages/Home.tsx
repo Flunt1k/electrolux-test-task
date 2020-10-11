@@ -5,6 +5,8 @@ import DashboardCard from '../components/DashboardCard';
 import Container from '@material-ui/core/Container/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar/Snackbar';
+import Alert from '@material-ui/lab/Alert/Alert'
 
 import ModalAddBlock from '../components/ModalAddBlock';
 
@@ -12,6 +14,10 @@ import {IWashingMachine} from '../interfaces';
 import {typedUseSelector} from '../redux/store';
 import {useDispatch} from 'react-redux';
 import {fetchAllMachines} from '../redux/washingMachines/thunksActionFunctions';
+import {
+  hideErrorAlert,
+  hideFailedAlert, hideSuccessAlert,
+} from '../redux/dashboard/actionCreators';
 
 export const useHomeStyles = makeStyles(() => ({
   media: {
@@ -152,6 +158,9 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
   const dispatch = useDispatch()
   const isLoading = typedUseSelector(state => state.dashboard.loading)
   const machines = typedUseSelector(state => state.washingMachine);
+  const error = typedUseSelector(state => state.dashboard.error)
+  const failed = typedUseSelector(state => state.dashboard.failed)
+  const success = typedUseSelector(state => state.dashboard.success)
   useEffect(() => {
     dispatch(fetchAllMachines())
   }, [dispatch])
@@ -175,6 +184,21 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
         <ModalAddBlock classes={classes}
                        visible={visibleCreateMachine}
                        onClose={onClose}/>
+        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => dispatch(hideErrorAlert())}>
+          <Alert onClose={() => dispatch(hideErrorAlert())} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={Boolean(failed)} autoHideDuration={4000} onClose={() => dispatch(hideFailedAlert())}>
+          <Alert onClose={() => dispatch(hideFailedAlert())} severity="warning">
+            {failed}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={Boolean(success)} autoHideDuration={3000} onClose={() => dispatch(hideSuccessAlert())}>
+          <Alert onClose={() => dispatch(hideSuccessAlert())} severity="success">
+            {success}
+          </Alert>
+        </Snackbar>
       </>
   );
 };

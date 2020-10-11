@@ -54,7 +54,7 @@ export const washingMachineReducer = (
       return {
         ...state,
         washingMachines: state.washingMachines.map(
-            machine => machine.serialNumber === action.payload.serialNumber
+            machine => machine._id === action.payload._id
                 ? action.payload
                 : machine,
         ),

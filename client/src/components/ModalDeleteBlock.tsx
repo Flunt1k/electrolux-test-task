@@ -6,6 +6,11 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import {Button} from '@material-ui/core';
+import {
+  fetchDeleteMachine,
+  fetchDeleteMachinesByModel,
+} from '../redux/washingMachines/thunksActionFunctions';
+import {useDispatch} from 'react-redux';
 
 interface ModalDeleteBlockProps {
   classes: ReturnType<typeof useHomeStyles>
@@ -15,15 +20,24 @@ interface ModalDeleteBlockProps {
   onClose: () => void
 }
 
-const ModalDeleteBlock: React.FC<ModalDeleteBlockProps> = ({classes, onClose, visible, serialNumber, model}: ModalDeleteBlockProps):React.ReactElement => {
+const ModalDeleteBlock: React.FC<ModalDeleteBlockProps> = ({
+  classes,
+  onClose,
+  visible,
+  serialNumber,
+  model,
+}: ModalDeleteBlockProps): React.ReactElement => {
+  const dispatch = useDispatch();
   const handleClickDeleteBySerialNumber = (): void => {
-    onClose()
-  }
+    dispatch(fetchDeleteMachine(serialNumber));
+    onClose();
+  };
 
   const handleClickDeleteByModel = (): void => {
-    onClose()
-  }
-  return(
+    dispatch(fetchDeleteMachinesByModel(model))
+    onClose();
+  };
+  return (
       <>
         <Dialog open={visible} onClose={onClose}
                 aria-labelledby="form-dialog-title" fullWidth>
@@ -52,7 +66,7 @@ const ModalDeleteBlock: React.FC<ModalDeleteBlockProps> = ({classes, onClose, vi
           </DialogActions>
         </Dialog>
       </>
-  )
-}
+  );
+};
 
-export default ModalDeleteBlock
+export default ModalDeleteBlock;
