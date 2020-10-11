@@ -16,6 +16,7 @@ import validation from '../utils/validation';
 import {useDispatch} from 'react-redux';
 import {fetchCreateMachine} from '../redux/washingMachines/thunksActionFunctions';
 import {IWashingMachine} from '../interfaces';
+import {showErrorAlert} from '../redux/dashboard/actionCreators';
 
 interface ModalAddBlockProps {
   classes: ReturnType<typeof useHomeStyles>;
@@ -50,6 +51,11 @@ const ModalAddBlock: React.FC<ModalAddBlockProps> = ({
       setValidationSerialNumber(undefined)
     }
 
+    if (dataState.model === '' || dataState.dateOfManufacture === '') {
+      dispatch(showErrorAlert('Не все поля заполнены!'))
+      return
+    }
+
     dispatch(fetchCreateMachine({...dataState, dateOfManufacture: date}))
     setDataState()
     onClose()
@@ -63,7 +69,10 @@ const ModalAddBlock: React.FC<ModalAddBlockProps> = ({
         >
           <DialogTitle className={classes.dialogTitle}>
             Добавить машину
-            <IconButton onClick={onClose}
+            <IconButton onClick={() => {
+              onClose()
+              setDataState()
+            }}
                         color="secondary"
                         aria-label="close"
             >
