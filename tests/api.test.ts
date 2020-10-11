@@ -9,7 +9,7 @@ import {
 } from '../models/WashingMachine';
 
 import DoneCallback = jest.DoneCallback;
-import {IMachineErrors} from '../client/src/interfaces';
+import {IErrorOfMachine} from '../core/interfaces';
 
 describe('Tests for endpoints', () => {
 
@@ -103,7 +103,7 @@ describe('Tests for endpoints', () => {
             send({
               error: {code: 'E204', errorText: 'Поломка'},
             });
-        const {status, data}: { status: string, data: { errorList: IMachineErrors[], serialNumber: number } } = response.body;
+        const {status, data}: { status: string, data: { errorList: IErrorOfMachine[], serialNumber: number } } = response.body;
         expect(status).toBe('success');
         expect(data.errorList.length).toBe(1);
         done();

@@ -2,24 +2,16 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "noImplicitAny": true,
+    "baseUrl": ".",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowJs": false,
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "preserveConstEnums": true,
-    "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": false,
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "jsx": "react"
+    "outDir": "dist"
   },
   "files": ["./node_modules/@types/node/index.d.ts"],
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "client"],
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "./client"],
   "typeRoots": ["./node_modules/@types"]
 }
