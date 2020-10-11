@@ -10,9 +10,8 @@ import {
 class WashingMachineController {
   async getAll(_: any, res: express.Response): Promise<void> {
     try {
-      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel
-        .find({})
-        .exec();
+      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel.find(
+          {}).exec();
 
       res.status(200).json({
         status: 'success',
@@ -31,9 +30,8 @@ class WashingMachineController {
     const model: string = req.body.model;
 
     try {
-      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel
-        .find({model})
-        .exec();
+      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel.find(
+          {model}).exec();
 
       if (!machines.length) {
         res.status(404).json({
@@ -60,9 +58,8 @@ class WashingMachineController {
     const status: boolean = req.body.status;
 
     try {
-      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel
-        .find({status})
-        .exec();
+      const machines: WashingMachineDocumentInterface[] = await WashingMachineModel.find(
+          {status}).exec();
 
       res.status(200).json({
         status: 'success',
@@ -88,8 +85,8 @@ class WashingMachineController {
     };
 
     try {
-      const machine: WashingMachineDocumentInterface = await WashingMachineModel
-        .create(data);
+      const machine: WashingMachineDocumentInterface = await WashingMachineModel.create(
+          data);
 
       res.status(201).json({
         status: 'success',
@@ -108,9 +105,8 @@ class WashingMachineController {
     const serialNumber: number = +req.params.serialNumber;
 
     try {
-      const removedData = await WashingMachineModel
-        .deleteOne({serialNumber})
-        .exec();
+      const removedData = await WashingMachineModel.deleteOne({serialNumber}).
+          exec();
 
       if (!removedData.deletedCount) {
         res.status(404).json({
@@ -137,9 +133,7 @@ class WashingMachineController {
     const model: string = req.body.model;
 
     try {
-      const removedData = await WashingMachineModel
-        .deleteMany({model})
-        .exec();
+      const removedData = await WashingMachineModel.deleteMany({model}).exec();
 
       if (!removedData.deletedCount) {
         res.status(404).json({
@@ -167,12 +161,11 @@ class WashingMachineController {
     const serialNumber: number = +req.params.serialNumber;
     const updates: object = req.body.updates;
     try {
-        const machine: WashingMachineDocumentInterface | null = await WashingMachineModel
-          .findOneAndUpdate(
-              {serialNumber},
-              {$set: updates},
-              {new: true}
-              );
+      const machine: WashingMachineDocumentInterface | null = await WashingMachineModel.findOneAndUpdate(
+          {serialNumber},
+          {$set: updates},
+          {new: true},
+      );
       if (!machine) {
         res.status(404).json({
           status: 'failed',
@@ -183,7 +176,7 @@ class WashingMachineController {
 
       res.status(200).json({
         status: 'success',
-        data: machine
+        data: machine,
       });
     } catch (err) {
       errorHandler(err, res);
@@ -192,20 +185,19 @@ class WashingMachineController {
 
   async updateMachineStatusBySerialNumber(
       req: express.Request,
-      res: express.Response
+      res: express.Response,
   ): Promise<void> {
     const serialNumber: number = +req.params.serialNumber;
 
     try {
-      const machine: WashingMachineDocumentInterface | null = await WashingMachineModel
-        .findOne({serialNumber}, {status: 1, serialNumber: 1})
-        .exec();
+      const machine: WashingMachineDocumentInterface | null = await WashingMachineModel.findOne(
+          {serialNumber}, {status: 1, serialNumber: 1}).exec();
 
       if (machine) {
-        machine.status = !machine.status
+        machine.status = !machine.status;
         res.status(200).json({
           status: 'success',
-          data: machine
+          data: machine,
         });
         await machine.save();
         return;
@@ -213,12 +205,39 @@ class WashingMachineController {
 
       res.status(404).json({
         status: 'failed',
-        message: `Машина с серийным номером ${serialNumber} не найдена`
+        message: `Машина с серийным номером ${serialNumber} не найдена`,
       });
 
     } catch (err) {
       errorHandler(err, res);
     }
+  }
+
+  async updateErrorList(
+      req: express.Request,
+      res: express.Response,
+  ): Promise<void> {
+    const serialNumber = +req.params.serialNumber;
+    const {error} = req.body;
+    const machine: WashingMachineDocumentInterface | null = await WashingMachineModel.findOne(
+        {serialNumber}, {historyOfErrors: 1});
+    if (machine) {
+      machine.historyOfErrors?.push(error);
+      res.status(200).json({
+        status: 'success',
+        data: {
+          errorList: machine.historyOfErrors,
+          serialNumber,
+        },
+      });
+      await machine.save();
+      return;
+    }
+
+    res.status(404).json({
+      status: 'failed',
+      message: `Машина с серийным номером ${serialNumber} не найдена!`
+    })
   }
 
 }

@@ -13,6 +13,7 @@ router.delete('/model', WashingMachineCtrl.removeMachineByModel)
 router.delete('/:serialNumber', WashingMachineCtrl.removeMachineBySerialNumber)
 
 router.patch('/status/:serialNumber', WashingMachineCtrl.updateMachineStatusBySerialNumber)
+router.patch('/errorList/:serialNumber', WashingMachineCtrl.updateErrorList)
 router.patch('/:serialNumber', WashingMachineCtrl.updateMachineBySerialNumber)
 
 export default router

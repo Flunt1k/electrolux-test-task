@@ -1,4 +1,5 @@
 import { Document, model, Schema } from 'mongoose'
+import {IErrorOfMachine} from '../core/interfaces';
 
 export interface IWashingMachine {
   id?: string;
@@ -7,7 +8,7 @@ export interface IWashingMachine {
   dateOfManufacture: string;
   washingCycles?: number;
   status?: boolean;
-  historyOfErrors?: []
+  historyOfErrors?: IErrorOfMachine[]
 }
 
 export type WashingMachineDocumentInterface = IWashingMachine & Document;
