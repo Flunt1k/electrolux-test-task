@@ -7,7 +7,7 @@ import {keys} from '../keys/keys';
 import {IWashingMachine, WashingMachineModel} from '../models/WashingMachine';
 
 import DoneCallback = jest.DoneCallback;
-import {IErrorList} from '../core/interfaces';
+import {IMachineErrors} from '../client/src/interfaces';
 
 describe('Tests for endpoints', () => {
   let conn: Connection;
@@ -168,9 +168,9 @@ describe('Tests for endpoints', () => {
             send({
               error: {code: 'E204', errorText: 'Поломка'},
             });
-        const {status, data}: { status: string, data: { list: IErrorList, serialNumber: number } } = response.body;
+        const {status, data}: { status: string, data: { errorList: IMachineErrors[], serialNumber: number } } = response.body;
         expect(status).toBe('success');
-        expect(data.list.listOfErrors.length).toBe(1);
+        expect(data.errorList.length).toBe(1);
         done();
       });
 
