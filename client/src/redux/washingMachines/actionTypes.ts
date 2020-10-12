@@ -12,7 +12,7 @@ export const DELETE_MACHINES_BY_MODEL = 'DELETE_MACHINES_BY_MODEL';
 export const UPDATE_MACHINE = 'UPDATE_MACHINE';
 export const UPDATE_MACHINE_STATUS = 'UPDATE_MACHINE_STATUS';
 export const UPDATE_MACHINE_ERROR_LIST = 'UPDATE_MACHINE_ERROR_LIST';
-export const SEARCH = 'SEARCH'
+export const SEARCH = 'SEARCH';
 
 interface GetMachinesAction {
   type: typeof GET_ALL_MACHINES
@@ -58,8 +58,8 @@ interface UpdateMachineErrorListAction {
 }
 
 interface SearchingAction {
- type: typeof SEARCH;
- input: string | undefined
+  type: typeof SEARCH;
+  input: string | undefined
 }
 
 export type WashingMachineActionTypes =
@@ -71,4 +71,4 @@ export type WashingMachineActionTypes =
     | UpdateMachineAction
     | UpdateMachineStatusAction
     | UpdateMachineErrorListAction
-|SearchingAction
+    | SearchingAction
