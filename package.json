@@ -10,8 +10,11 @@
   "scripts": {
     "start": "node dist/server.js",
     "test": "jest --detectOpenHandles --forceExit",
-    "dev": "ts-node server.ts",
-    "nodemon": "nodemon"
+    "server": "ts-node server.ts",
+    "nodemon": "nodemon",
+    "client-install": "npm install --prefix client",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "@types/express": "^4.17.8",
@@ -19,6 +22,7 @@
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.11.8",
     "@types/supertest": "^2.0.10",
+    "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "moment": "^2.29.1",
