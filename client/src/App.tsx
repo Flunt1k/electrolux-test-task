@@ -25,7 +25,7 @@ function App() {
     setVisible(false)
   }
   return (
-      <div style={{height: "100vh"}}>
+      <div style={{height: "100%"}}>
           <AppBar position="static" color={'primary'}>
             <Toolbar className={classes.navbar}>
               <Typography variant="h6">

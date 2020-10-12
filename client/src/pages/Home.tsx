@@ -50,7 +50,7 @@ export const useHomeStyles = makeStyles(() => ({
   modelText: {
     textShadow: '2px 2px 2px #000000',
     fontWeight: 900,
-    fontSize: 30,
+    fontSize: '1.7em',
   },
 
   primaryField: {
@@ -146,6 +146,13 @@ export const useHomeStyles = makeStyles(() => ({
     top: 0,
   },
 
+  flexContainer : {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  },
+
   loader: {
     width: '100%',
     height: '100vh',
@@ -155,7 +162,7 @@ export const useHomeStyles = makeStyles(() => ({
   },
 
   searching: {
-    width: 300,
+    width: '16em',
   },
 
   filter: {
@@ -216,7 +223,7 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
   return (
       <>
         <Container>
-          <Container>
+          <Container className={classes.flexContainer}>
             <TextField className={classes.searching}
                        margin="dense"
                        label="Поиск по серийному номеру"
@@ -256,7 +263,7 @@ const Home: React.FC<HomeInterface> = ({visibleCreateMachine, onClose}: HomeInte
               Показать все выключенные
             </Button>
           </Container>
-          <Grid container spacing={4} style={{marginTop: 10}}>
+          <Grid container wrap="wrap" spacing={4} style={{marginTop: 10}}>
             {!isLoading ?
                 checkSearching()
                 :

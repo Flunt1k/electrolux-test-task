@@ -83,7 +83,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({data, classes}: DashboardC
 
   return (
       <>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={6} lg={4}>
           <Card variant={'outlined'} className={classes.card}>
             <CardMedia
                 className={classes.media}
